@@ -1,8 +1,7 @@
 import ZipFile
 import Downloads: download
-import DataStructures: DefaultDict
-import SimulationService.Service.Execution.Interface.Available: simulate, calibrate_then_simulate
 import SimulationService.Service.Execution.Interface.ProblemInputs: coerce_model
+import SimulationService.Service.Execution.Interface.Available: simulate
 
 owner = "DARPA-ASKEM"
 repo = "experiments"
@@ -11,27 +10,59 @@ biomodels_path = "/thin-thread-examples/mira_v2/biomodels"
 model_filehandle = "model_askenet.json"
 model_file = biomodels_path * r"/(.+)/" * model_filehandle 
 
-biomodels_zip = ZipFile.Reader(download("https://github.com/$owner/$repo/archive/$revision.zip"))
-biomodels = [match(model_file, file.name).captures[1] => (String ∘ read)(file) for file in biomodels_zip.files if !(isnothing ∘ match)(model_file, file.name)] 
+struct Status
+    success::Bool
+    reason::String
+    Status(success::Bool=false, reason::String="") = new(success, reason)
+end
 
-status = DefaultDict{String, Dict{String, Bool}}(() -> Dict{String, Bool}())
-for (name, biomodel) in biomodels
-    print("$name : ")
-    try
-        coerce_model(biomodel)
-        status[name]["coerce"] = true
-        print("COERCES")
+mutable struct ReportEntry
+    name::String
+    coerce::Status
+    simulate::Status
+    ReportEntry(name, coerce::Status=Status(), simulate::Status=Status()) = new(string(name), coerce, simulate)
+end
+
+function generate_report()
+    biomodels_zip = ZipFile.Reader(download("https://github.com/$owner/$repo/archive/$revision.zip"))
+    biomodels = [match(model_file, file.name).captures[1] => (String ∘ read)(file) for file in biomodels_zip.files if !(isnothing ∘ match)(model_file, file.name)] 
+
+    report = ReportEntry[]
+
+    for (name, biomodel) in biomodels
+        push!(report, ReportEntry(name))
         try
-            biomodel = simulate(coerce_model(biomodel), (0.0, 100.0), nothing)
-            status[name]["simulate"] = true
-            println("; SIMULATES")
+            coerce_model(biomodel)
+            report[end].coerce = Status(true, "")
         catch e
-            status[name]["simulate"] = false
-            println(";")
+            report[end].coerce = Status(false, string(e))
+        else
+            try
+                simulate(coerce_model(biomodel), (0.0, 100.0), nothing)
+                report[end].simulate = Status(true, nothing)
+            catch e
+                report[end].simulate = Status(false, string(e))
+            end
         end
-    catch e
-        status[name]["coerce"] = false
-        status[name]["simulate"] = false
-        println(";")
+    end
+    return report
+end
+
+function print_report!(report::Array{ReportEntry} = generate_report())
+    for entry in report
+        line = string(entry.name) * ":\t"
+        if entry.coerce.success
+            line *= "COERCES\t" 
+        else
+            line *= "[error: $(entry.coerce.reason)];" 
+            println(line)
+            continue
+        end
+        if entry.simulate.success
+            line *= "SIMULATES\t" 
+        else
+            line *= "[error: $(entry.simulate.reason)];" 
+            println(line)
+        end
     end
 end
