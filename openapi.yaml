@@ -145,7 +145,7 @@ paths:
                   type: object                   
               required:
                 - engine
-                - model_config_id
+                - model_config_ids
                 - timespan
       responses:
         '200':
