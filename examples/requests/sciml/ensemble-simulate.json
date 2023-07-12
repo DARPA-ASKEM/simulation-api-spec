@@ -1,0 +1,33 @@
+{
+  "engine": "sciml",
+  "model_configs": [
+    {
+      "id": "ba8da8d4-047d-11ee-be56",
+      "compartments": {
+        "S": "Susceptible",
+        "I": "Symptomatic+Asymptomatic",
+        "R": "Healthy"
+      }
+    },
+    {
+      "id": "c1cd941a-047d-11ee-be56",
+      "compartments": {
+        "S": "S",
+        "I": "I+D+A+R+T",
+        "R": "H+E"
+      }
+    },
+    {
+      "id": "c4b9f88a-047d-11ee-be56",
+      "compartments": {
+        "S": "S*10000",
+        "I": "I*10000",
+        "R": "R*10000"
+      }
+    }
+  ],
+  "timespan": {
+    "start": 0,
+    "end": 90
+  }
+}

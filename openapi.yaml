@@ -31,10 +31,9 @@ paths:
                       example: 0
                     end:
                       type: integer
-                      example: 0
+                      example: 90
                   items:
                     type: integer
-                  example: [0, 90]
                 extra:
                   description: optional extra system specific arguments for advanced use cases
                   type: object
@@ -92,7 +91,7 @@ paths:
                       example: 0
                     end:
                       type: integer
-                      example: 0
+                      example: 90
                 extra:
                   description: optional extra system specific arguments for advanced use cases
                   type: object
@@ -111,7 +110,8 @@ paths:
                   simulation_id:
                     type: string
                     example: fc5d80e4-0483-11ee-be56
-  /ensemble:
+  
+  /ensemble-simulate:
     post:
       summary: Perform an ensemble simulation
       operationId: createEnsemble
@@ -124,13 +124,35 @@ paths:
               properties:
                 engine:
                   type: string
-                  enum: [sciml, ciemss]
-                  example: sciml
-                model_config_ids:
+                  enum: [sciml, ciemss]           
+                model_configs:
                   type: array
                   items:
-                    type: string
-                  example: ["ba8da8d4-047d-11ee-be56", "c1cd941a-047d-11ee-be56", "c4b9f88a-047d-11ee-be56"]
+                    type: object
+                    properties:
+                      model_config_id:
+                        type: string
+                      solution_mappings: 
+                        type: object
+                  example: 
+                    - id: "ba8da8d4-047d-11ee-be56"
+                      compartments: 
+                        S: "Susceptible"
+                        I: "Symptomatic+Asymptomatic"
+                        R: "Healthy"
+                      weight: 0.4
+                    - id: "c1cd941a-047d-11ee-be56"
+                      compartments: 
+                        S: "S"
+                        I: "I+D+A+R+T"
+                        R: "H+E"
+                      weight: 0.1
+                    - id: "c4b9f88a-047d-11ee-be56"
+                      compartments:
+                        S: "S*10000"
+                        I: "I*10000"
+                        R: "R*10000"
+                      weight: 0.5
                 timespan:
                   type: object
                   properties:
@@ -139,7 +161,90 @@ paths:
                       example: 0
                     end:
                       type: integer
+                      example: 90
+
+                extra:
+                  description: optional extra system specific arguments for advanced use cases
+                  type: object                   
+              required:
+                - engine
+                - model_config_id
+                - timespan
+      responses:
+        '200':
+          description: Ensemble created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  simulation_id:
+                    type: string
+                    example: fc5d80e4-0483-11ee-be56
+  
+  /ensemble-calibrate:
+    post:
+      summary: Calibrate an ensemble of models
+      operationId: calibrateEnsemble
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                engine: 
+                  type: string
+                  enum: [sciml, ciemss]
+                  example: sciml              
+                model_configs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      model_config_id:
+                        type: string
+                      solution_mappings: 
+                        type: object
+                  example: 
+                    - id: "ba8da8d4-047d-11ee-be56"
+                      compartments: 
+                        S: "Susceptible"
+                        I: "Symptomatic+Asymptomatic"
+                        R: "Healthy"
+                      weight: 0.4
+                    - id: "c1cd941a-047d-11ee-be56"
+                      compartments: 
+                        S: "S"
+                        I: "I+D+A+R+T"
+                        R: "H+E"
+                      weight: 0.1
+                    - id: "c4b9f88a-047d-11ee-be56"
+                      compartments:
+                        S: "S*10000"
+                        I: "I*10000"
+                        R: "R*10000"
+                      weight: 0.5
+                dataset:
+                  type: object
+                  properties:
+                    id: 
+                      type: string
+                      example: "cd339570-047d-11ee-be55"
+                    filename:
+                      type: string
+                      example: "dataset.csv"
+                    mappings:
+                      type: object
+                timespan:
+                  type: object
+                  properties:
+                    start:
+                      type: integer
                       example: 0
+                    end:
+                      type: integer
+                      example: 90
                 extra:
                   description: optional extra system specific arguments for advanced use cases
                   type: object
@@ -180,4 +285,4 @@ paths:
                 properties:
                   status:
                     type: string
-                    enum: [queued, running, complete, error]
+                    enum: [queued, running, complete, error, failure]
