@@ -1,9 +1,9 @@
 {
   "engine": "ciemss",
   "username": "not_provided",
-  "model_config_id": "0da53e71-52c4-49fd-b957-2219af712fdd",
+  "model_config_id": "sidarthe",
   "dataset": {
-    "id": "cc52e71f-c744-4883-9412-0858d8455754",
+    "id": "train_data",
     "filename": "train_data.csv"
   },
   "timespan": {
