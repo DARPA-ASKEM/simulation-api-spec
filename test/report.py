@@ -5,9 +5,10 @@ from time import sleep, time
 import boto3
 import requests
 
-TDS_URL = os.environ("TDS_URL")
-PYCIEMSS_URL = os.environ("PYCIEMSS_URL")
-SCIML_URL = os.environ("SCIML_URL")
+TDS_URL = os.environ("TDS_URL", "data-service")
+PYCIEMSS_URL = os.environ("PYCIEMSS_URL", "pyciemss-api")
+SCIML_URL = os.environ("SCIML_URL", "sciml-service")
+BUCKET = os.environ("BUCKET", "jataware-sim-service-test")
 
 
 def eval_integration(service_name, endpoint, request):
@@ -57,7 +58,7 @@ def publish_report(report, upload):
     if upload:
         s3 = boto3.client("s3")
         full_handle = os.path.join("ta3", filename)
-        s3.upload_file(fullpath, settings.BUCKET, full_handle)
+        s3.upload_file(fullpath, BUCKET, full_handle)
 
 
 def report(upload=True):
