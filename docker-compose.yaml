@@ -194,5 +194,5 @@ services:
         condition: service_healthy
       pyciemss-worker:
         condition: service_started
-      simulation-service:
+      sciml-service:
         condition: service_healthy
