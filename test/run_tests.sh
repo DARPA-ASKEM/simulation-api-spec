@@ -1,4 +1,4 @@
 #!/bin/bash
 
 python /tests/seed.py
-pytest
+python /tests/report.py
