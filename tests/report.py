@@ -21,7 +21,7 @@ def eval_integration(service_name, endpoint, request):
         get_status = lambda: request.get(f"{base_url}/{endpoint}/status/{sim_id}").json()["status"]
         while get_status() in ["queued", "running"]:
             sleep(1)
-        if get_status() == "complete"
+        if get_status() == "complete":
             is_success = True
     return {
         "Integration Status": is_success,
@@ -50,12 +50,12 @@ def gen_report():
 
     
     report["scenarios"] = {name: {} for name in os.listdir("scenarios")}
-    for scenario in scenarios:
+    for scenario in report["scenarios"]:
         scenario_spec = {
-            "pyciemss": os.listdir(f"scenario/{scenario}/pyciemss"),
-            "sciml": os.listdir(f"scenario/{scenario}/sciml")
+            "pyciemss": os.listdir(f"scenarios/{scenario}/pyciemss"),
+            "sciml": os.listdir(f"scenarios/{scenario}/sciml")
         }
-        for service_name, tests in scenario_spec:
+        for service_name, tests in scenario_spec.items():
             for test_file in tests:
                 test = test_file.strip(".json")
                 name = f"{service_name}-{test}"
