@@ -5,7 +5,7 @@ from time import sleep, time
 import boto3
 import requests
 
-TDS_URL = os.environ.get("TDS_URL", "http://data-service")
+TDS_URL = os.environ.get("TDS_URL", "http://data-service:8000")
 PYCIEMSS_URL = os.environ.get("PYCIEMSS_URL", "http://pyciemss-api")
 SCIML_URL = os.environ.get("SCIML_URL", "http://sciml-service")
 BUCKET = os.environ.get("BUCKET", None)
