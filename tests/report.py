@@ -23,7 +23,7 @@ def eval_integration(service_name, endpoint, request):
     )
     if kickoff_request.status_code < 300:
         sim_id = kickoff_request.json()["simulation_id"]
-        get_status = lambda: requests.get(f"{base_url}/{endpoint}/status/{sim_id}").json()["status"]
+        get_status = lambda: requests.get(f"{base_url}/status/{sim_id}").json()["status"]
         while get_status() in ["queued", "running"]:
             sleep(1)
         if get_status() == "complete":
@@ -66,11 +66,14 @@ def gen_report():
                 test = test_file.split(".")[0]
                 name = f"{service_name}-{test}"
                 file = open(f"scenarios/{scenario}/{service_name}/{test_file}", "rb") 
+                print(f"Trying `/{endpoint}` ({service_name}, {scenario})")
                 report["scenarios"][scenario][name] = eval_integration(service_name, test, json.load(file))
+                print(f"Completed `/{endpoint}` ({service_name}, {scenario})")
     return report
 
 
 def publish_report(report, upload):
+    print("Publishing report")
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     filename = f"report_{timestamp}.json"
     fullpath = os.path.join("reports", filename)
@@ -79,6 +82,7 @@ def publish_report(report, upload):
         json.dump(report, file, indent=2)
 
     if upload:
+        print("Uploading report")
         s3 = boto3.client("s3")
         full_handle = os.path.join("ta3", filename)
         s3.upload_file(fullpath, BUCKET, full_handle)

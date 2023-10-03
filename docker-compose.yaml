@@ -145,7 +145,7 @@ services:
       - STANDALONE_MODE=False
       - PYCIEMSS_OUTPUT_FILEPATH=result.csv
     ports:
-      - 8000
+      - 8001:8000
     depends_on:
       data-service:
         condition: service_started
