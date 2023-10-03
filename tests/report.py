@@ -66,9 +66,9 @@ def gen_report():
                 test = test_file.split(".")[0]
                 name = f"{service_name}-{test}"
                 file = open(f"scenarios/{scenario}/{service_name}/{test_file}", "rb") 
-                print(f"Trying `/{endpoint}` ({service_name}, {scenario})")
+                print(f"Trying `/{test}` ({service_name}, {scenario})")
                 report["scenarios"][scenario][name] = eval_integration(service_name, test, json.load(file))
-                print(f"Completed `/{endpoint}` ({service_name}, {scenario})")
+                print(f"Completed `/{test}` ({service_name}, {scenario})")
     return report
 
 

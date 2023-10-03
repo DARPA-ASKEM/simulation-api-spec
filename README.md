@@ -6,6 +6,8 @@ and trying to use a few requests through the relevant parts of the stack.
 ## Usage
 Run `docker compose up`. Once the `tests` container completes, the report is done.
 
+See `env.sample` to see what to populate `.env` with.
+
 ## Adding Scenarios
 To add scenarios, create a new directory in `scenarios`. For each request you would like to 
 try out, create a file `scenarios/{scenario_name}/{backend-service}/{endpoint-name}.json`. For example, a PyCIEMSS
