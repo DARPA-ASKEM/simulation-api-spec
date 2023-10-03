@@ -12,6 +12,7 @@ TDS_URL = os.environ.get("TDS_URL", "http://data-service:8000")
 PYCIEMSS_URL = os.environ.get("PYCIEMSS_URL", "http://pyciemss-api:8000")
 SCIML_URL = os.environ.get("SCIML_URL", "http://sciml-service:8080")
 BUCKET = os.environ.get("BUCKET", None)
+UPLOAD = os.environ.get("UPLOAD", "FALSE").lower() == "false"
 
 
 def eval_integration(service_name, endpoint, request):
@@ -97,4 +98,4 @@ def report(upload=True):
 
 
 if __name__ == "__main__":
-    report(BUCKET is not None)
+    report(UPLOAD)
