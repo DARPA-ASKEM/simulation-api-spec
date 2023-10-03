@@ -193,5 +193,3 @@ services:
         condition: service_started
       sciml-service:
         condition: service_healthy
-    env_file:
-      - .env
