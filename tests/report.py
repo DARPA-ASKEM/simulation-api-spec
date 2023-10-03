@@ -6,6 +6,7 @@ from datetime import datetime
 import boto3
 import requests
 
+
 TDS_URL = os.environ.get("TDS_URL", "http://data-service:8000")
 PYCIEMSS_URL = os.environ.get("PYCIEMSS_URL", "http://pyciemss-api:8000")
 SCIML_URL = os.environ.get("SCIML_URL", "http://sciml-service:8080")
@@ -16,10 +17,10 @@ def eval_integration(service_name, endpoint, request):
     start_time = time()
     is_success = False
     base_url = PYCIEMSS_URL if service_name == "pyciemss" else SCIML_URL
-    kickoff_request = requests.post(f"{base_url}/{endpoint}", json=request, 
+    kickoff_request = requests.post(f"{base_url}/{endpoint}", json=request,
         headers= {
             "Content-Type": "application/json"
-        }    
+        }
     )
     if kickoff_request.status_code < 300:
         sim_id = kickoff_request.json()["simulation_id"]
@@ -39,7 +40,7 @@ def gen_report():
         "scenarios": {
             "pyciemss": {},
             "sciml": {}
-        }, 
+        },
         "services": {
             "TDS": {
                 "version": "UNAVAILABLE"
@@ -53,7 +54,7 @@ def gen_report():
         }
     }
 
-    
+
     report["scenarios"] = {name: {} for name in os.listdir("scenarios")}
     for scenario in report["scenarios"]:
         scenario_spec = {}
@@ -65,7 +66,7 @@ def gen_report():
             for test_file in tests:
                 test = test_file.split(".")[0]
                 name = f"{service_name}-{test}"
-                file = open(f"scenarios/{scenario}/{service_name}/{test_file}", "rb") 
+                file = open(f"scenarios/{scenario}/{service_name}/{test_file}", "rb")
                 print(f"Trying `/{test}` ({service_name}, {scenario})")
                 report["scenarios"][scenario][name] = eval_integration(service_name, test, json.load(file))
                 print(f"Completed `/{test}` ({service_name}, {scenario})")
@@ -86,6 +87,9 @@ def publish_report(report, upload):
         s3 = boto3.client("s3")
         full_handle = os.path.join("ta3", filename)
         s3.upload_file(fullpath, BUCKET, full_handle)
+    else:
+        print(f"{fullpath}:")
+        print(open(fullpath, "r").read())
 
 
 def report(upload=True):
