@@ -64,10 +64,9 @@ def gen_report():
         for service_name, tests in scenario_spec.items():
             for test_file in tests:
                 test = test_file.split(".")[0]
-                name = f"{service_name}-{test}"
                 file = open(f"scenarios/{scenario}/{service_name}/{test_file}", "rb") 
                 print(f"Trying `/{test}` ({service_name}, {scenario})")
-                report["scenarios"][scenario][name] = eval_integration(service_name, test, json.load(file))
+                report["scenarios"][scenario][test] = eval_integration(service_name, test, json.load(file))
                 print(f"Completed `/{test}` ({service_name}, {scenario})")
     return report
 
