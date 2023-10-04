@@ -3,16 +3,19 @@ import json
 import logging
 from time import sleep, time
 from datetime import datetime
+from collections import defaultdict
 
 import boto3
 import requests
 
+logging.basicConfig()
+logging.getLogger().setLevel(logging.INFO)
 
 TDS_URL = os.environ.get("TDS_URL", "http://data-service:8000")
 PYCIEMSS_URL = os.environ.get("PYCIEMSS_URL", "http://pyciemss-api:8000")
 SCIML_URL = os.environ.get("SCIML_URL", "http://sciml-service:8080")
 BUCKET = os.environ.get("BUCKET", None)
-UPLOAD = os.environ.get("UPLOAD", "FALSE").lower() == "false"
+UPLOAD = os.environ.get("UPLOAD", "TRUE").lower() == "true"
 
 
 def eval_integration(service_name, endpoint, request):
@@ -40,8 +43,8 @@ def eval_integration(service_name, endpoint, request):
 def gen_report():
     report = {
         "scenarios": {
-            "pyciemss": {},
-            "sciml": {}
+            "pyciemss": defaultdict(dict),
+            "sciml": defaultdict(dict)
         },
         "services": {
             "TDS": {
@@ -57,8 +60,8 @@ def gen_report():
     }
 
 
-    report["scenarios"] = {name: {} for name in os.listdir("scenarios")}
-    for scenario in report["scenarios"]:
+    scenarios = {name: {} for name in os.listdir("scenarios")}
+    for scenario in scenarios:
         scenario_spec = {}
         for backend in ["pyciemss", "sciml"]:
             path = f"scenarios/{scenario}/{backend}"
@@ -68,14 +71,14 @@ def gen_report():
             for test_file in tests:
                 test = test_file.split(".")[0]
                 file = open(f"scenarios/{scenario}/{service_name}/{test_file}", "rb") 
-                print(f"Trying `/{test}` ({service_name}, {scenario})")
-                report["scenarios"][scenario][test] = eval_integration(service_name, test, json.load(file))
-                print(f"Completed `/{test}` ({service_name}, {scenario})")
+                logging.info(f"Trying `/{test}` ({service_name}, {scenario})")
+                report["scenarios"][service_name][scenario][test] = eval_integration(service_name, test, json.load(file))
+                logging.info(f"Completed `/{test}` ({service_name}, {scenario})")
     return report
 
 
 def publish_report(report, upload):
-    print("Publishing report")
+    logging.info("Publishing report")
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     filename = f"report_{timestamp}.json"
     fullpath = os.path.join("reports", filename)
@@ -84,13 +87,13 @@ def publish_report(report, upload):
         json.dump(report, file, indent=2)
 
     if upload:
-        print("Uploading report")
+        logging.info(f"Uploading report to 'f{BUCKET}'")
         s3 = boto3.client("s3")
         full_handle = os.path.join("ta3", filename)
         s3.upload_file(fullpath, BUCKET, full_handle)
     else:
-        print(f"{fullpath}:")
-        print(open(fullpath, "r").read())
+        logging.info(f"{fullpath}:")
+        logging.info(open(fullpath, "r").read())
 
 
 def report(upload=True):
