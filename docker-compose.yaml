@@ -147,6 +147,8 @@ services:
     depends_on:
       data-service:
         condition: service_started
+      redis:
+        condition: service_started
     healthcheck:
       test: curl http://localhost:8000/ || exit 1
       interval: 10s
@@ -187,7 +189,7 @@ services:
       context: .
       dockerfile: tests/Dockerfile
     environment:
-      - UPLOAD
+      - UPLOAD=FALSE
       - BUCKET
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY

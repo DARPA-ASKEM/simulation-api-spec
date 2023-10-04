@@ -15,7 +15,7 @@ TDS_URL = os.environ.get("TDS_URL", "http://data-service:8000")
 PYCIEMSS_URL = os.environ.get("PYCIEMSS_URL", "http://pyciemss-api:8000")
 SCIML_URL = os.environ.get("SCIML_URL", "http://sciml-service:8080")
 BUCKET = os.environ.get("BUCKET", None)
-UPLOAD = os.environ.get("UPLOAD", "TRUE").lower() == "true"
+UPLOAD = os.environ.get("UPLOAD", "FALSE").lower() == "true"
 
 
 def eval_integration(service_name, endpoint, request):
@@ -70,7 +70,7 @@ def gen_report():
         for service_name, tests in scenario_spec.items():
             for test_file in tests:
                 test = test_file.split(".")[0]
-                file = open(f"scenarios/{scenario}/{service_name}/{test_file}", "rb") 
+                file = open(f"scenarios/{scenario}/{service_name}/{test_file}", "rb")
                 logging.info(f"Trying `/{test}` ({service_name}, {scenario})")
                 report["scenarios"][service_name][scenario][test] = eval_integration(service_name, test, json.load(file))
                 logging.info(f"Completed `/{test}` ({service_name}, {scenario})")
