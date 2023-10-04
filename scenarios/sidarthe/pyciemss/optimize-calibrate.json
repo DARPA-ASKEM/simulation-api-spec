@@ -3,8 +3,8 @@
   "username": "not_provided",
   "model_config_id": "sidarthe",
   "dataset": {
-    "id": "train_data",
-    "filename": "train_data.csv"
+    "id": "optimize",
+    "filename": "optimize.csv"
   },
   "timespan": {
     "start": 0,
