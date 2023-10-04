@@ -86,12 +86,16 @@ def publish_report(report, upload):
     with open(fullpath, "w") as file:
         json.dump(report, file, indent=2)
 
-    if upload:
-        logging.info(f"Uploading report to 'f{BUCKET}'")
+    if upload and BUCKET is not None:
+        logging.info(f"Uploading report to '{BUCKET}'")
         s3 = boto3.client("s3")
         full_handle = os.path.join("ta3", filename)
         s3.upload_file(fullpath, BUCKET, full_handle)
-    else:
+
+    elif upload and BUCKET is None:
+        logging.error("NO BUCKET WAS PROVIDED. CANNOT UPLOAD")
+
+    if not upload or BUCKET is None:
         logging.info(f"{fullpath}:")
         logging.info(open(fullpath, "r").read())
 
