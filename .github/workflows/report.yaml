@@ -1,0 +1,24 @@
+---
+name: Report
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to Github Package
+        run: echo $GH_TOKEN | docker login ghcr.io -u fivegrant --password-stdin
+        env:
+          GH_TOKEN: ${{secrets.GH_TOKEN}}
+
+      - name: Pull images
+        run: docker compose pull
+
+      - name: Generate report
+        run: docker compose up --build
