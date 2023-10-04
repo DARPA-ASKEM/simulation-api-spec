@@ -158,10 +158,10 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - TDS_URL=http://data-service:8000
-      - RABBITMQ_HOST=message-queue
+      - RABBITMQ_HOST=rabbitmq
       - RABBITMQ_PORT=5672
-      - RABBITMQ_USERNAME=terarium
-      - RABBITMQ_PASSWORD=terarium123
+      - RABBITMQ_USERNAME=rmq_user
+      - RABBITMQ_PASSWORD=rmq_pass
     ports:
       - 8080
     depends_on:
@@ -186,6 +186,11 @@ services:
     build:
       context: .
       dockerfile: tests/Dockerfile
+    environment:
+      - UPLOAD
+      - BUCKET
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
     depends_on:
       pyciemss-api:
         condition: service_healthy
