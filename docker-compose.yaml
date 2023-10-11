@@ -184,6 +184,14 @@ services:
       interval: 10s
       timeout: 20s
       retries: 30
+  rabbitmq-consumer:
+    container_name: rabbitmq-consumer
+    image: ghcr.io/darpa-askem/pyciemss-api:latest
+    command: poetry run mockrabbitmq 
+    env_file:
+      - ../.env
+    depends_on:
+      - rabbitmq
   tests:
     build:
       context: .
