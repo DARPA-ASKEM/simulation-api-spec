@@ -184,6 +184,19 @@ services:
       interval: 10s
       timeout: 20s
       retries: 30
+  dashboard:
+    image: ghcr.io/darpa-askem/integration-dashboard:latest
+    environment:
+      - AWS_ACCESS_KEY_ID=none
+      - AWS_SECRET_ACCESS_KEY=none
+      - BUCKET=none
+      - USE_LOCAL=TRUE
+    expose:
+      - 8501
+    ports:
+      - 8501:8501
+    volumes:
+      - report:/outputs
   tests:
     build:
       context: .
@@ -200,3 +213,7 @@ services:
         condition: service_started
       sciml-service:
         condition: service_healthy
+    volumes:
+      - report:/outputs
+volumes:
+  report:
