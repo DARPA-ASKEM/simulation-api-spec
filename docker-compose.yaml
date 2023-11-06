@@ -125,11 +125,11 @@ services:
       minio:
         condition: service_started
   redis:
-    image: ghcr.io/darpa-askem/redis:7.0.12-alpine
+    image: redis:7.0.12-alpine
     ports:
       - 6379
   rabbitmq:
-    image: ghcr.io/darpa-askem/rabbitmq:3.11.13-management-alpine
+    image: rabbitmq:3.11.13-management-alpine
     environment:
       - RABBITMQ_DEFAULT_USER=rmq_user
       - RABBITMQ_DEFAULT_PASS=rmq_pass
@@ -170,7 +170,7 @@ services:
       pyciemss-api:
         condition: service_started
   sciml-service:
-    image: ghcr.io/darpa-askem/simulation-service:latest
+    image: ghcr.io/darpa-askem/sciml-service:latest
     environment:
       - SIMSERVICE_TDS_URL=http://data-service:8000
       - ENABLE_REMOTE_DATA_HANDLING=false
