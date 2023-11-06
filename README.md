@@ -5,15 +5,21 @@ and trying to use a few requests through the relevant parts of the stack.
 
 ## Usage
 
-1. First you must have a [github personal access token (classic)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) that grants scope access to
+### Step by Step Guide
+
+1. Create a [GitHub Personal Access Token (classic)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) that grants scope access to
    - [x] .`workflow`,
    - [x] `read:packages`,
    - [x] `write:packages`
    - [x] and `delete:packages`.
-3. Then in the `simulation-integration` directory, execute: `echo [YOUR_GITHUB_TOKEN] | docker login ghcr.io -u USERNAME --password-stdin`
-4. Then run `docker compose pull`
-5. followed by: `docker compose build`
-6. followed by `docker compose run tests`.
+3. Execute `echo [YOUR_GITHUB_TOKEN] | docker login ghcr.io -u [YOUR_GITHUB_USERNAME] --password-stdin`  in the `simulation-integration` directory
+4. Update your containers by running `docker compose pull`
+5. Build your containers by `docker compose build`
+6. Run the tests with `docker compose run tests`.
+7. View the results with `docker compose run --build --service-ports dashboard` (Assuming you haven't deleted any volumes)
+
+
+### Usage Details
    
 Once the `tests` container completes, the report is done.
 
