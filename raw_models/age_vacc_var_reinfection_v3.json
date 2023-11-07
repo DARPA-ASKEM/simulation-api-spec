@@ -1,10 +1,12 @@
 {
- "name": "Age Vacc Variant Model with Reinfection V2",
- "schema": "https://raw.githubusercontent.com/DARPA-ASKEM/Model-Representations/petrinet_v0.5/petrinet/petrinet_schema.json",
- "schema_name": "petrinet",
- "description": "This model has been stratified by age (4 ways), variant (3 ways), and vaccine status (2 ways).",
- "model_version": "0.1",
- "properties": {},
+ "header": {
+  "name": "Age Vacc Variant Model with Reinfection V3",
+  "schema": "https://raw.githubusercontent.com/DARPA-ASKEM/Model-Representations/petrinet_v0.5/petrinet/petrinet_schema.json",
+  "schema_name": "petrinet",
+  "description": "This model has been stratified by age (4 ways), variant (3 ways), and vaccine status (2 ways).",
+  "model_version": "0.1",
+  "properties": {},
+ },
  "model": {
   "states": [
    {
@@ -9168,7 +9170,7 @@
     },
     {
      "id": "q",
-     "value": 0.4,
+     "value": 0.38,
       "distribution": {
       "type": "Uniform1",
       "parameters": {
@@ -10068,7 +10070,7 @@
     },
     {
      "id": "limm",
-     "value": 0.0027397260273972603,
+     "value": 0.00555555555,
      "units": {
       "expression": "1/day",
       "expression_mathml": "<apply><power/><ci>day</ci><cn>-1</cn></apply>"
@@ -10080,12 +10082,6 @@
      "id": "infected",
      "name": "infected",
      "expression": "I_0_0_0 + I_0_0_1 + I_1_0_0 + I_1_0_1 + I_2_0_0 + I_2_0_1 + I_3_0_0 + I_3_0_1 + I_0_1_0 + I_0_1_1 + I_1_1_0 + I_1_1_1 + I_2_1_0 + I_2_1_1 + I_3_1_0 + I_3_1_1 + I_0_2_0 + I_0_2_1 + I_1_2_0 + I_1_2_1 + I_2_2_0 + I_2_2_1 + I_3_2_0 + I_3_2_1",
-     "expression_mathml": "<apply><plus/><ci>I_middle_aged</ci><ci>I_old</ci><ci>I_young</ci></apply>"
-    },
-    {
-     "id": "exposed",
-     "name": "exposed",
-     "expression": "E_0_0_0 + E_0_0_1 + E_1_0_0 + E_1_0_1 + E_2_0_0 + E_2_0_1 + E_3_0_0 + E_3_0_1 + E_0_1_0 + E_0_1_1 + E_1_1_0 + E_1_1_1 + E_2_1_0 + E_2_1_1 + E_3_1_0 + E_3_1_1 + E_0_2_0 + E_0_2_1 + E_1_2_0 + E_1_2_1 + E_2_2_0 + E_2_2_1 + E_3_2_0 + E_3_2_1",
      "expression_mathml": "<apply><plus/><ci>I_middle_aged</ci><ci>I_old</ci><ci>I_young</ci></apply>"
     },
     {
