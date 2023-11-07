@@ -1,12 +1,10 @@
 {
- "header": {
-  "name": "Age Vacc Variant Model with Reinfection V2",
-  "schema": "https://raw.githubusercontent.com/DARPA-ASKEM/Model-Representations/petrinet_v0.5/petrinet/petrinet_schema.json",
-  "schema_name": "petrinet",
-  "description": "This model has been stratified by age (4 ways), variant (3 ways), and vaccine status (2 ways).",
-  "model_version": "0.1",
-  "properties": {},
- },
+ "name": "Age Vacc Variant Model with Reinfection V2",
+ "schema": "https://raw.githubusercontent.com/DARPA-ASKEM/Model-Representations/petrinet_v0.5/petrinet/petrinet_schema.json",
+ "schema_name": "petrinet",
+ "description": "This model has been stratified by age (4 ways), variant (3 ways), and vaccine status (2 ways).",
+ "model_version": "0.1",
+ "properties": {},
  "model": {
   "states": [
    {
