@@ -1,4 +1,5 @@
 {
+  "id": "seirhds-stockflow",
   "header": {
     "name": "SEIRHDS Model",
     "schema": "https://raw.githubusercontent.com/DARPA-ASKEM/Model-Representations/stockflow_v0.1/stockflow/stockflow_schema.json",
