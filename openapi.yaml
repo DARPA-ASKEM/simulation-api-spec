@@ -3,7 +3,102 @@ info:
   title: Simulation Service
   description: The shared interface for the SciML and PyCIEMSS services. Differences in APIs should be contained to the `extra` argument.
   version: 0.1.0
-
+components:
+  schemas:
+    ModelConfigurations:
+      type: array
+      description: "List of model configurations to use. The sum of the weights should be 1."
+      items:
+        $ref: '#/components/schemas/ModelConfiguration'
+      example:
+        - id: "ba8da8d4-047d-11ee-be56"
+          solution_mappings: 
+            S: "Susceptible"
+            I: "SymptomaticAndAsymptomatic"
+            R: "Healthy"
+          weight: 0.4
+        - id: "c1cd941a-047d-11ee-be56"
+          solution_mappings: 
+            S: "S"
+            I: "IandDandAandRandT"
+            R: "HandE"
+          weight: 0.1
+        - id: "c4b9f88a-047d-11ee-be56"
+          solution_mappings:
+            S: "scaleS"
+            I: "scaleI"
+            R: "scaleR"
+          weight: 0.5
+    Dataset:
+      type: object
+      description: "Information to retrieve and match data to the model"
+      properties:
+        id:
+          type: string
+          description: "The ID of the dataset in the Terarium Data Service"
+          example: "cd339570-047d-11ee-be55"
+        filename:
+          type: string
+          description: "The filename to use from the dataset"
+          example: "dataset.csv"
+        mappings:
+          type: object
+          description: "
+            A key-value pair representing the column to map from (key) to the
+            new name (value). Note that we currently expect the unmapped columns
+            to still be used in the model. There is currently no dropping.
+            NOTE - we may eventually change this so that only mapped columns
+            are the ones that are used.
+          "
+    Interventions:
+      type: array
+      description: "A list of all interventions where each variable at each timestep is separated"
+      items:
+        $ref: '#/components/schemas/Intervention'
+    ModelConfiguration:
+      type: object
+      properties:
+        model_config_id:
+          type: string
+        solution_mappings: 
+          type: object
+          description: "
+            A key-value pair that indicates how the observables will be used in
+            map to the ensembled model. The key is the name of the state in the
+            ensembled model and the value is the observable in the individual
+            model that will be used to map to the ensembled state.
+          "
+        weight:
+          type: number
+          description: "How much the model should affect the final result. Must be between 0 and 1."
+    Intervention:
+      type: object
+      description: "A change in a variables value at a specific timestep."
+      properties:
+          timestep:
+            type: number
+            example: 2
+          name:
+            type: string
+            example: "beta"
+          value:
+            type: number
+            example: 0.4
+    Timespan:
+      type: object
+      properties:
+        start:
+          type: integer
+          example: 0
+        end:
+          type: integer
+          example: 90
+      description: "Timesteps to start and stop the simulation"
+    Engine:
+      type: string
+      enum: [sciml, ciemss]
+      example: sciml
+      description: "Choice of which simulation service to use"
 paths:
   /simulate:
     post:
@@ -17,37 +112,14 @@ paths:
               type: object
               properties:
                 engine:
-                  type: string
-                  enum: [sciml, ciemss]
-                  example: sciml
+                  $ref: '#/components/schemas/Engine'
                 model_config_id:
                   type: string
                   example: "ba8da8d4-047d-11ee-be56"
                 timespan:
-                  type: object
-                  properties:
-                    start:
-                      type: integer
-                      example: 0
-                    end:
-                      type: integer
-                      example: 90
-                  items:
-                    type: integer
+                    $ref: '#/components/schemas/Timespan'
                 interventions:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      timestep:
-                        type: number
-                        example: 2
-                      name:
-                        type: string
-                        example: "beta"
-                      value:
-                        type: number
-                        example: 0.4                    
+                   $ref: '#/components/schemas/Interventions'                  
                 extra:
                   description: optional extra system specific arguments for advanced use cases
                   type: object
@@ -70,7 +142,7 @@ paths:
   /calibrate:
     post:
       summary: Calibrate a model to data then simulate
-      description: Calibrate a model and perform a "fitting" simulation over the time range of the calibration dataset and a simulation of a time range specified in `timespan` if `timespan` is specified. The SciML engine allows for calibration without additional simulation; in that case `timespan` is left off the payload.
+      description: Calibrate a model and perform a "fitting" simulation over the time range of the calibration dataset and a simulation of a time range specified in `timespan` if `timespan` is specified. NOTICE - This will be changed soon to NOT perform a simulation after calibration
       operationId: calibratesimulateModel
       requestBody:
         required: true
@@ -80,32 +152,14 @@ paths:
               type: object
               properties:
                 engine:
-                  type: string
-                  enum: [sciml, ciemss]
-                  example: sciml
+                  $ref: '#/components/schemas/Engine'
                 model_config_id:
                   type: string
                   example: "c1cd941a-047d-11ee-be56"
                 dataset:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      example: "cd339570-047d-11ee-be55"
-                    filename:
-                      type: string
-                      example: "dataset.csv"
-                    mappings:
-                      type: object
+                  $ref: '#/components/schemas/Dataset'
                 timespan:
-                  type: object
-                  properties:
-                    start:
-                      type: integer
-                      example: 0
-                    end:
-                      type: integer
-                      example: 90
+                    $ref: '#/components/schemas/Timespan'
                 extra:
                   description: optional extra system specific arguments for advanced use cases
                   type: object
@@ -137,45 +191,11 @@ paths:
               type: object
               properties:
                 engine:
-                  type: string
-                  enum: [sciml, ciemss]           
+                  $ref: '#/components/schemas/Engine'
                 model_configs:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      model_config_id:
-                        type: string
-                      solution_mappings: 
-                        type: object
-                  example: 
-                    - id: "ba8da8d4-047d-11ee-be56"
-                      observables: 
-                        S: "Susceptible"
-                        I: "SymptomaticAndAsymptomatic"
-                        R: "Healthy"
-                      weight: 0.4
-                    - id: "c1cd941a-047d-11ee-be56"
-                      observables: 
-                        S: "S"
-                        I: "IandDandAandRandT"
-                        R: "HandE"
-                      weight: 0.1
-                    - id: "c4b9f88a-047d-11ee-be56"
-                      observables:
-                        S: "scaleS"
-                        I: "scaleI"
-                        R: "scaleR"
-                      weight: 0.5
+                  $ref: '#/components/schemas/ModelConfigurations'
                 timespan:
-                  type: object
-                  properties:
-                    start:
-                      type: integer
-                      example: 0
-                    end:
-                      type: integer
-                      example: 90
+                    $ref: '#/components/schemas/Timespan'
 
                 extra:
                   description: optional extra system specific arguments for advanced use cases
@@ -207,58 +227,14 @@ paths:
             schema:
               type: object
               properties:
-                engine: 
-                  type: string
-                  enum: [sciml, ciemss]
-                  example: sciml              
+                engine:
+                  $ref: '#/components/schemas/Engine'
                 model_configs:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      model_config_id:
-                        type: string
-                      solution_mappings: 
-                        type: object
-                  example: 
-                    - id: "ba8da8d4-047d-11ee-be56"
-                      observables: 
-                        S: "Susceptible"
-                        I: "SymptomaticAndAsymptomatic"
-                        R: "Healthy"
-                      weight: 0.4
-                    - id: "c1cd941a-047d-11ee-be56"
-                      observables: 
-                        S: "S"
-                        I: "IandDandAandRandT"
-                        R: "HandE"
-                      weight: 0.1
-                    - id: "c4b9f88a-047d-11ee-be56"
-                      observables:
-                        S: "scaleS"
-                        I: "scaleI"
-                        R: "scaleR"
-                      weight: 0.5
+                  $ref: '#/components/schemas/ModelConfigurations'
                 dataset:
-                  type: object
-                  properties:
-                    id: 
-                      type: string
-                      example: "cd339570-047d-11ee-be55"
-                    filename:
-                      type: string
-                      example: "dataset.csv"
-                    mappings:
-                      type: object
+                  $ref: '#/components/schemas/Dataset'
                 timespan:
-                  type: object
-                  properties:
-                    start:
-                      type: integer
-                      example: 0
-                    end:
-                      type: integer
-                      example: 90
+                    $ref: '#/components/schemas/Timespan'
                 extra:
                   description: optional extra system specific arguments for advanced use cases
                   type: object
