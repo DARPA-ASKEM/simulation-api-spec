@@ -1,0 +1,123 @@
+{
+  "id": "LV-sheep-foxes-regnet",
+    "header": {
+    "name": "Lotka Volterra Sheep Foxes",
+    "schema": "https://raw.githubusercontent.com/DARPA-ASKEM/Model-Representations/regnet_v0.1/regnet/regnet_schema.json",
+    "description": "Lotka Volterra model",
+    "model_version": "0.1"
+  },
+  "model": {
+    "vertices": [
+      {
+        "id": "S",
+        "name": "Sheep",
+        "grounding": {},
+        "initial": "S0",
+        "rate_constant": "alpha",
+        "sign": true
+      },
+      {
+        "id": "F",
+        "name": "Foxes",
+        "grounding": {},
+        "initial": "F0",
+        "rate_constant": "gamma",
+        "sign": false
+      }
+    ],
+    "edges": [
+      {
+        "id": "fox_eats_sheep",
+        "source": "F",
+        "target": "S",
+        "sign": false,
+        "properties": {
+          "rate_constant": "beta"
+        }
+      },
+      {
+        "id": "sheep_feeds_fox",
+        "source": "S",
+        "target": "F",
+        "sign": true,
+        "properties": {
+          "rate_constant": "delta"
+        }
+      }
+    ],
+    "parameters": [
+      {
+        "id": "S0",
+        "description": "Initial sheep population",
+        "value": 100,
+        "distribution": {
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 75.0,
+                "maximum": 125.0
+            }
+        }
+      },
+      {
+        "id": "F0",
+        "description": "Initial fox population",
+        "value": 8,
+        "distribution": {
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 6.0,
+                "maximum": 10.0
+            }
+        }
+      },
+      {
+        "id": "alpha",
+        "description": "Maximum per capita prey growth rate",
+        "value": 0.4,
+        "distribution": {
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 0.3,
+                "maximum": 0.5
+            }
+        }
+      },
+      {
+        "id": "beta",
+        "description": "Effect of predators on prey",
+        "value": 0.4,
+        "distribution": {
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 0.3,
+                "maximum": 0.5
+            }
+        }
+      },
+      {
+        "id": "gamma",
+        "description": "Effect of prey on predators",
+        "value": 2.0
+      },
+      {
+        "id": "delta",
+        "description": "Maximum per capita predator death rate",
+        "value": 0.09
+      }
+    ],
+    "observables": [     
+        {
+             "id": "S",
+             "name": "sheep",
+             "expression": "S",
+             "expression_mathml": "<ci>S</ci>"
+        },
+        {
+             "id": "F",
+             "name": "foxes",
+             "expression": "F",
+             "expression_mathml": "<ci>F</ci>"
+        }
+    ]
+  }
+}
