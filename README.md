@@ -12,11 +12,12 @@ and trying to use a few requests through the relevant parts of the stack.
    - [x] `read:packages`,
    - [x] `write:packages`
    - [x] and `delete:packages`.
-3. Execute `echo [YOUR_GITHUB_TOKEN] | docker login ghcr.io -u [YOUR_GITHUB_USERNAME] --password-stdin`  in the `simulation-integration` directory
-4. Update your containers by running `docker compose pull`
-5. Build your containers by `docker compose build`
-6. Run the tests with `docker compose run tests`.
-7. View the results with `docker compose run --build --service-ports dashboard` (Assuming you haven't deleted any volumes)
+1. Execute `echo [YOUR_GITHUB_TOKEN] | docker login ghcr.io -u [YOUR_GITHUB_USERNAME] --password-stdin`  in the `simulation-integration` directory
+1. Update your containers by running `docker compose pull`
+1. Create `.env` by running `cp env.sample .env` 
+1. Build your containers by `docker compose build`
+1. Run the tests with `docker compose run tests`.
+1. View the results with `docker compose run --build --service-ports dashboard` (Assuming you haven't deleted any volumes)
 
 
 ### Usage Details
