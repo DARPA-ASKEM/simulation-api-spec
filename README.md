@@ -35,6 +35,17 @@ be sure to shut down the services by running `docker compose down` to conserve y
 See `env.sample` to see which environment variables are used by the test/report runner. 
 You can create a `.env` envfile based on sample if you want to override the defaults.
 
+If the report needs to be published, the envfile should have some additional vars and look like this:
+```
+UPLOAD=FALSE
+BUCKET=results-bucket
+AWS_ACCESS_KEY_ID=xyz
+AWS_SECRET_ACCESS_KEY=xyz
+PROJECT_ID=1
+TDS_URL=http://data-service.terarium.ai
+SIMSERVICE_TDS_URL=http://data-service.terarium.ai
+```
+
 ## Adding Scenarios
 To add scenarios, create a new directory in `scenarios`. For each request you would like to 
 try out, create a file `scenarios/{scenario_name}/{backend-service}/{endpoint-name}.json`. For example, a PyCIEMSS
