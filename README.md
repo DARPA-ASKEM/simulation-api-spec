@@ -18,6 +18,7 @@ and trying to use a few requests through the relevant parts of the stack.
 1. Build your containers by `docker compose build`
 1. Run the tests with `docker compose run tests`.
 1. View the results with `docker compose run --build --service-ports dashboard` (Assuming you haven't deleted any volumes)
+1. To clean up the test runner after use, run `docker compose down`
 
 
 ### Usage Details
