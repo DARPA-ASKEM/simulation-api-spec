@@ -14,7 +14,10 @@
   ],
   "dataset": {
     "id": "ensemble",
-    "filename": "ensemble.csv"
+    "filename": "ensemble.csv",
+    "mappings": {
+      "tstep": "Timestep"
+    }
   },
   "timespan": {
     "start": 0,
