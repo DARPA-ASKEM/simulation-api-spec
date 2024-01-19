@@ -50,7 +50,7 @@ SIMSERVICE_TDS_URL=http://data-service.terarium.ai
 ## Adding Scenarios
 To add scenarios, create a new directory in `scenarios`. For each request you would like to 
 try out, create a file `scenarios/{scenario_name}/{backend-service}/{endpoint-name}.json`. For example, a PyCIEMSS
-`simulate` scenario can be added by putting the payload in `scenarios/{scenario_name}pyciemss/simulate.json`.
+`simulate` scenario can be added by putting the payload in `scenarios/{scenario_name}/pyciemss/simulate.json`.
 
 These requests will need to reference assets in TDS which are prepopulated by `tests/seed.py`. To add more resources,
 go to `data/datasets` to add a CSV and `data/model` to add a configuration.
