@@ -55,7 +55,7 @@
         "upstream_stock": "H",
         "downstream_stock": "D",
         "rate_expression": "death * H / los",
-        "rate_expression_mathml": "<apply><divide/><apply><times/><ci>death</ci><ci>H</ci></apply><ci>lost</ci></apply>"
+        "rate_expression_mathml": "<apply><divide/><apply><times/><ci>death</ci><ci>H</ci></apply><ci>los</ci></apply>"
       },
       {
         "id": "flow7",
