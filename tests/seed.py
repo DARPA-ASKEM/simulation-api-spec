@@ -5,12 +5,13 @@ import logging
 
 import requests
 
+from auth import auth_session
 from utils import create_project, add_asset
 
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
 
-TDS_URL = os.environ.get("TDS_URL", "http://data-service:8000")
+TDS_URL = os.environ.get("TDS_URL", "http://hmi-server:3000")
 
 if __name__ == "__main__":
     # Get project ID from environment
@@ -18,7 +19,7 @@ if __name__ == "__main__":
 
     if project_id:
         logging.info(f"Found project ID in environment: {project_id}")
-        proj_resp = requests.get(f"{TDS_URL}/projects/{project_id}")
+        proj_resp = auth_session().get(f"{TDS_URL}/projects/{project_id}")
         if proj_resp.status_code == 404:
             raise Exception(
                 f"Project ID {project_id} does not exist in TDS at {TDS_URL}"
@@ -26,7 +27,7 @@ if __name__ == "__main__":
 
         # if the project exists, remove all simulations from it
         types = ["simulations"]
-        sim_resp = requests.get(
+        sim_resp = auth_session().get(
             f"{TDS_URL}/projects/{project_id}/assets", params={"types": types}
         )
         if sim_resp.status_code >= 300:
@@ -38,7 +39,7 @@ if __name__ == "__main__":
             for sim in sim_resp.json().get("simulations", []):
                 sim_id = sim["id"]
                 logging.info(f"Deleting {sim_id} from project {project_id}")
-                del_resp = requests.delete(
+                del_resp = auth_session().delete(
                     f"{TDS_URL}/projects/{project_id}/assets/simulations/{sim_id}"
                 )
                 if del_resp.status_code >= 300:
@@ -69,7 +70,7 @@ if __name__ == "__main__":
                 "description": model["header"]["description"],
                 "configuration": model,
             }
-        model_response = requests.post(
+        model_response = auth_session().post(
             TDS_URL + "/models",
             json=model,
             headers={"Content-Type": "application/json"},
@@ -81,7 +82,7 @@ if __name__ == "__main__":
         else:
             add_asset(model_response.json()["id"], "models", project_id)
         config["model_id"] = model_response.json()["id"]
-        config_response = requests.post(
+        config_response = auth_session().post(
             TDS_URL + "/model_configurations",
             json=config,
             headers={"Content-Type": "application/json"},
@@ -92,7 +93,7 @@ if __name__ == "__main__":
         filename = filepath.split("/")[-1]
         dataset_name = filename.split(".")[0]
         dataset = {"id": dataset_name, "name": dataset_name, "file_names": [filename]}
-        dataset_response = requests.post(
+        dataset_response = auth_session().post(
             TDS_URL + "/datasets",
             json=dataset,
             headers={"Content-Type": "application/json"},
@@ -104,10 +105,10 @@ if __name__ == "__main__":
         else:
             add_asset(dataset_response.json()["id"], "datasets", project_id)
 
-        url_response = requests.get(
+        url_response = auth_session().get(
             TDS_URL + f"/datasets/{dataset_name}/upload-url",
             params={"filename": filename},
         )
         upload_url = url_response.json()["url"]
         with open(filepath, "rb") as file:
-            requests.put(upload_url, file)
+            auth_session().put(upload_url, file)

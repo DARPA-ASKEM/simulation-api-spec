@@ -9,15 +9,16 @@ from urllib.parse import urljoin
 import boto3
 import requests
 
+from auth import auth_session
 from utils import add_asset
 from workflow import workflow_builder
 
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
 
-TDS_URL = os.environ.get("TDS_URL", "http://data-service:8000")
-PYCIEMSS_URL = os.environ.get("PYCIEMSS_URL", "http://pyciemss-api:8000")
-SCIML_URL = os.environ.get("SCIML_URL", "http://sciml-service:8080")
+TDS_URL = os.environ.get("TDS_URL", "http://hmi-server:3000")
+PYCIEMSS_URL = os.environ.get("PYCIEMSS_URL", "http://pyciemss-api:3040")
+SCIML_URL = os.environ.get("SCIML_URL", "http://sciml-service:3030")
 BUCKET = os.environ.get("BUCKET", None)
 UPLOAD = os.environ.get("UPLOAD", "FALSE").lower() == "true"
 
@@ -61,7 +62,7 @@ def add_workflow(workflow_payload):
     if workflow_payload is None:
         logging.info("No workflow payload provided, not making request")
         return
-    workflow_response = requests.post(
+    workflow_response = auth_session().post(
         TDS_URL + "/workflows",
         json=workflow_payload,
         headers={"Content-Type": "application/json"},
@@ -93,7 +94,6 @@ def gen_report():
     report = {
         "scenarios": {"pyciemss": defaultdict(dict), "sciml": defaultdict(dict)},
         "services": {
-            "TDS": {"version": get_version(TDS_URL)},
             "PyCIEMSS Service": {"version": get_version(PYCIEMSS_URL)},
             "SciML Service": {"version": get_version(SCIML_URL)},
         },
