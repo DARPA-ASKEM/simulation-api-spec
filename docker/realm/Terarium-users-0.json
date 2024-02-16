@@ -16,69 +16,60 @@
           "id": "9cf083a7-7577-476f-ad78-2255191f265d",
           "type": "password",
           "userLabel": "My password",
-          "createdDate": 1660649791772,
-          "secretData": "{\"value\":\"TFv2IXWNceO7FackXg36VKn9cTr7ouf/flboSiCPFV9ogrtEB63Hk5w9BIUpRkDJFB3gcLE7sI5mv4ekO6+oTg==\",\"salt\":\"gw7ocyP+wV3AahAEk4VrRQ==\",\"additionalParameters\":{}}",
+          "createdDate": 1708092558758,
+          "secretData": "{\"value\":\"Ur9xXuwpXBGUKSMU6LWIAzSYggcX6Kt4XmQ4RFB1tiU=\",\"salt\":\"BqXVGYJhMSg8rinJxl/16g==\",\"additionalParameters\":{}}",
           "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
         }
       ],
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
+        "service-account",
         "default-roles-terarium",
         "user",
-        "admin",
-        "service-account"
+        "admin"
       ],
       "notBefore": 0,
       "groups": []
     },
     {
-      "id": "feb72ff7-6084-4c35-a3cd-78f60151fe6a",
-      "createdTimestamp": 1677174125262,
-      "username": "adminservice",
+      "id": "4f6ec93c-af9e-4002-9985-b86673b81772",
+      "createdTimestamp": 1708092648878,
+      "username": "api-service",
       "enabled": true,
       "totp": false,
       "emailVerified": false,
-      "firstName": "",
-      "lastName": "",
-      "attributes": {
-        "description": [
-          "service account"
-        ]
-      },
+      "firstName": "Internal",
+      "lastName": "Services",
       "credentials": [
         {
-          "id": "2975101a-ae28-433f-a922-08e1349df9f0",
+          "id": "df4dfbca-e00f-4b01-a575-e40decd9bfe4",
           "type": "password",
           "userLabel": "My password",
-          "createdDate": 1677174140394,
-          "secretData": "{\"value\":\"sF77pZW3K8zVl+d19nfVsskHlXGBMipQGk01lW8YAk85aI4vTNWPCyKzMxQwfYO57K1YYFwiXR1bukbd8gtiAw==\",\"salt\":\"gcgD0xe1eZDpW2i41Ud/Bg==\",\"additionalParameters\":{}}",
+          "createdDate": 1708092684456,
+          "secretData": "{\"value\":\"PqiMtG1iTTT6rWTaCqSsVsMnNSc8KZP2BZS/ESlmTvo=\",\"salt\":\"1lTVXbodEbkssgmRzCntGg==\",\"additionalParameters\":{}}",
           "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
         }
       ],
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
-        "default-roles-terarium"
+        "service-account",
+        "default-roles-terarium",
+        "user",
+        "admin"
       ],
-      "clientRoles": {
-        "realm-management": [
-          "realm-admin"
-        ]
-      },
       "notBefore": 0,
       "groups": []
     },
     {
-      "id": "dc905248-2070-4005-a36a-8e7c563f5424",
-      "createdTimestamp": 1677174169006,
-      "username": "new1",
+      "id": "abff4077-91b1-4d43-96c0-6d0550240573",
+      "createdTimestamp": 1708092230866,
+      "username": "service-account-account",
       "enabled": true,
       "totp": false,
       "emailVerified": false,
-      "firstName": "New1",
-      "lastName": "Test",
-      "email": "new1@test.io",
+      "serviceAccountClientId": "account",
       "credentials": [],
       "disableableCredentialTypes": [],
       "requiredActions": [],
@@ -89,15 +80,30 @@
       "groups": []
     },
     {
-      "id": "64ace551-fd35-4a17-ba51-d9da9c367505",
-      "createdTimestamp": 1677174184817,
-      "username": "new2",
+      "id": "3afcdbfe-4013-4353-98ca-14a5d3809e05",
+      "createdTimestamp": 1708092230874,
+      "username": "service-account-account-console",
       "enabled": true,
       "totp": false,
       "emailVerified": false,
-      "firstName": "New2",
-      "lastName": "Test",
-      "email": "new2@test.io",
+      "serviceAccountClientId": "account-console",
+      "credentials": [],
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-terarium"
+      ],
+      "notBefore": 0,
+      "groups": []
+    },
+    {
+      "id": "b31e3007-7ade-4efc-9f50-84e9bf5de95d",
+      "createdTimestamp": 1708092230880,
+      "username": "service-account-admin-cli",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "serviceAccountClientId": "admin-cli",
       "credentials": [],
       "disableableCredentialTypes": [],
       "requiredActions": [],
@@ -130,6 +136,23 @@
       "groups": []
     },
     {
+      "id": "79c0414f-8fe8-4abe-8370-d24d2a3f6ed4",
+      "createdTimestamp": 1708092230888,
+      "username": "service-account-broker",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "serviceAccountClientId": "broker",
+      "credentials": [],
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-terarium"
+      ],
+      "notBefore": 0,
+      "groups": []
+    },
+    {
       "id": "ad511612-701b-4c59-879c-e427d621b58d",
       "createdTimestamp": 1677174093225,
       "username": "service-account-realm-management",
@@ -152,30 +175,18 @@
       "groups": []
     },
     {
-      "id": "903b33bc-ff1f-4b1c-bb57-83b6ca1680ab",
-      "createdTimestamp": 1660649884140,
-      "username": "ursula",
+      "id": "0ea0ac6c-c23c-4c81-b4f2-879c35c50459",
+      "createdTimestamp": 1708092230895,
+      "username": "service-account-security-admin-console",
       "enabled": true,
       "totp": false,
       "emailVerified": false,
-      "firstName": "Lady",
-      "lastName": "Ursula",
-      "email": "ursula@test.io",
-      "credentials": [
-        {
-          "id": "d1a7d0de-45d8-4c5f-bf7b-96b447af4d2a",
-          "type": "password",
-          "userLabel": "My password",
-          "createdDate": 1660649898917,
-          "secretData": "{\"value\":\"mgZHfGXn48dR6VN6gaDIz8uKATv2Z11jN1bRuT1I+LVuHzTRXFYEAr5q9axjWXJYM4vc2gssmJKBnQFuE33qUA==\",\"salt\":\"U4aBoky9C6wWJ7OK/P2Oaw==\",\"additionalParameters\":{}}",
-          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
-        }
-      ],
+      "serviceAccountClientId": "security-admin-console",
+      "credentials": [],
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
-        "default-roles-terarium",
-        "user"
+        "default-roles-terarium"
       ],
       "notBefore": 0,
       "groups": []

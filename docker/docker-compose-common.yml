@@ -14,8 +14,6 @@ services:
     ports:
       - "9000:9000"
       - "9090:9090"
-    networks:
-      - terarium
     environment:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: admin123
@@ -28,8 +26,6 @@ services:
   elasticsearch:
     container_name: elasticsearch
     image: elasticsearch:8.11.4
-    networks:
-      - terarium
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -68,8 +64,6 @@ services:
       timeout: 10s
       retries: 20
       start_period: 3s
-    networks:
-      - terarium
     ports:
       - "7474:7474"
       - "7687:7687"
@@ -93,8 +87,6 @@ services:
       interval: 30s
       timeout: 30s
       retries: 3
-    networks:
-      - terarium
     ports:
       - "5672:5672"
       - "15671:15671"
@@ -109,8 +101,6 @@ services:
   spicedb:
     container_name: spicedb
     image: authzed/spicedb:v1.28.0
-    networks:
-      - terarium
     ports:
       - "50051:50051"
     command: [ "serve" ]
@@ -133,8 +123,6 @@ services:
   migrate-spicedb:
     container_name: migrate-spicedb
     image: authzed/spicedb:v1.28.0
-    networks:
-      - terarium
     command: [ "migrate", "head" ]
     restart: "on-failure"
     environment:
@@ -149,10 +137,8 @@ services:
   postgres:
     container_name: postgres
     image: postgres:14-alpine
-    networks:
-      - terarium
     ports:
-      - "5430:5432"
+      - "5432:5432"
     restart: always
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready", "-d", "terarium" ]

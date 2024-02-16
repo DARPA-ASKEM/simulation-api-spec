@@ -17,8 +17,8 @@ logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
 
 TDS_URL = os.environ.get("TDS_URL", "http://hmi-server:3000")
-PYCIEMSS_URL = os.environ.get("PYCIEMSS_URL", "http://pyciemss-api:3040")
-SCIML_URL = os.environ.get("SCIML_URL", "http://sciml-service:3030")
+PYCIEMSS_URL = os.environ.get("PYCIEMSS_URL", "http://pyciemss-api:8000")
+SCIML_URL = os.environ.get("SCIML_URL", "http://sciml-service:8080")
 BUCKET = os.environ.get("BUCKET", None)
 UPLOAD = os.environ.get("UPLOAD", "FALSE").lower() == "true"
 
@@ -51,7 +51,7 @@ def eval_integration(service_name, endpoint, request):
             is_success = True
             # Add artifacts from simulations to TDS depending on what test is being run:
             # 1) Simulation in TDS
-            add_asset(sim_id, "simulations", PROJECT_ID)
+            add_asset(sim_id, "SIMULATION", PROJECT_ID)
     return {
         "Integration Status": is_success,
         "Execution Time": time() - start_time,
@@ -80,7 +80,7 @@ def add_workflow(workflow_payload):
         else:
             with open("project_id.txt", "r") as f:
                 project_id = f.read()
-        add_asset(workflow_response.json()["id"], "workflows", project_id)
+        add_asset(workflow_response.json()["id"], "WORKFLOW", project_id)
 
 
 def gen_report():

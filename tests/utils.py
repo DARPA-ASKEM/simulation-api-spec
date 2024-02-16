@@ -22,8 +22,6 @@ def create_project():
     project = {
         "name": "Integration Test Suite Project",
         "description": f"Test generated at {ts}",
-        "assets": [],
-        "active": True,
     }
 
     resp = auth_session().post(f"{TDS_URL}/projects", json=project)
@@ -66,9 +64,7 @@ def add_asset(resource_id, resource_type, project_id):
         "left": project_id,
         "left_type": "Project",
         "right": resource_id,
-        "right_type": resource_type[
-            :-1
-        ].capitalize(),  # Converts "models" to "Model", etc.
+        "right_type": resource_type,  # Converts "models" to "Model", etc.
     }
     prov_resp = auth_session().post(f"{TDS_URL}/provenance", json=provenance_payload)
 

@@ -6,8 +6,8 @@ import requests
 
 
 TDS_URL = os.environ.get("TDS_URL", "http://hmi-server:3000")
-TDS_USER = os.environ.get("TDS_USER", "adam")
-TDS_PASSWORD = os.environ.get("TDS_PASSWORD", "asdf1ASDF")
+TDS_USER = os.environ.get("TDS_USER", "api-service")
+TDS_PASSWORD = os.environ.get("TDS_PASSWORD", "agent bio terraform")
 
 
 def auth_session():

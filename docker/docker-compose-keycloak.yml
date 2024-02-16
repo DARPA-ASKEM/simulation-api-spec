@@ -5,8 +5,6 @@ services:
   keycloak:
     container_name: keycloak
     image: ghcr.io/unchartedsoftware/keycloak:22.0.4.0
-    networks:
-      - terarium
     restart: always
     healthcheck:
       # Keycloak no longer has curl, https://stackoverflow.com/questions/58168955/testing-minimal-docker-containers-with-healthcheck/76790330#76790330
@@ -57,8 +55,6 @@ services:
   keycloak-init:
     container_name: keycloak-init
     image: ghcr.io/unchartedsoftware/keycloak:22.0.4.0
-    networks:
-      - terarium
     command: [ 'import', '--dir', '/data', '--override', 'true' ]
     volumes:
       - ./realm:/data

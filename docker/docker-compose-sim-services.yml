@@ -5,14 +5,12 @@ services:
   sciml-service:
     container_name: sciml-service
     image: ghcr.io/darpa-askem/sciml-service:latest
-    networks:
-      - terarium
     ports:
-      - "3030:8080"
+      - "8080:8080"
     environment:
       SIMSERVICE_TDS_URL: "http://hmi-server:3000"
-      SIMSERVICE_TDS_USER: "adam"
-      SIMSERVICE_TDS_PASSWORD: "asdf1ASDF"
+      SIMSERVICE_TDS_USER: "api-service"
+      SIMSERVICE_TDS_PASSWORD: "agent bio terraform"
       SIMSERVICE_RABBITMQ_ENABLED: "false"
       SIMSERVICE_RABBITMQ_LOGIN: "terarium"
       SIMSERVICE_RABBITMQ_PASSWORD: "terarium123"
@@ -36,14 +34,12 @@ services:
   pyciemss-api:
     container_name: pyciemss-api
     image: ghcr.io/darpa-askem/pyciemss-api:latest
-    networks:
-      - terarium
     ports:
-      - "3040:8000"
+      - "8000:8000"
     environment:
       TDS_URL: "http://hmi-server:3000"
-      TDS_USER: "adam"
-      TDS_PASSWORD: "asdf1ASDF"
+      TDS_USER: "api-service"
+      TDS_PASSWORD: "agent bio terraform"
       STANDALONE_MODE: "False"
       PYCIEMSS_OUTPUT_FILEPATH: "result.csv"
       REDIS_HOST: "redis"
@@ -64,12 +60,10 @@ services:
   pyciemss-worker:
     container_name: pyciemss-worker
     image: ghcr.io/darpa-askem/pyciemss-worker:latest
-    networks:
-      - terarium
     environment:
       TDS_URL: "http://hmi-server:3000"
-      TDS_USER: "adam"
-      TDS_PASSWORD: "asdf1ASDF"
+      TDS_USER: "api-service"
+      TDS_PASSWORD: "agent bio terraform"
       STANDALONE_MODE: "False"
       PYCIEMSS_OUTPUT_FILEPATH: "result.csv"
       REDIS_HOST: "redis"

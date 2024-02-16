@@ -40,7 +40,7 @@ if __name__ == "__main__":
                 sim_id = sim["id"]
                 logging.info(f"Deleting {sim_id} from project {project_id}")
                 del_resp = auth_session().delete(
-                    f"{TDS_URL}/projects/{project_id}/assets/simulations/{sim_id}"
+                    f"{TDS_URL}/projects/{project_id}/assets/SIMULATION/{sim_id}"
                 )
                 if del_resp.status_code >= 300:
                     logging.info(f"Failed to delete simulation {sim_id}")
@@ -57,15 +57,12 @@ if __name__ == "__main__":
     model_configs = glob("./data/models/*.json")
     for config_path in model_configs:
         obj = json.load(open(config_path, "rb"))
-        if "id" not in obj:
-            raise Exception("An 'id' as a property of a model/config")
         if "configuration" in obj:
             config = obj
             model = config["configuration"]
         else:
             model = obj
             config = {
-                "id": model["id"],
                 "name": model["header"]["name"],
                 "description": model["header"]["description"],
                 "configuration": model,
@@ -80,7 +77,8 @@ if __name__ == "__main__":
                 f"Failed to POST model ({model_response.status_code}): {config['id']}"
             )
         else:
-            add_asset(model_response.json()["id"], "models", project_id)
+            add_asset(model_response.json()["id"], "MODEL", project_id)
+
         config["model_id"] = model_response.json()["id"]
         config_response = auth_session().post(
             TDS_URL + "/model_configurations",
@@ -92,21 +90,23 @@ if __name__ == "__main__":
     for filepath in datasets:
         filename = filepath.split("/")[-1]
         dataset_name = filename.split(".")[0]
-        dataset = {"id": dataset_name, "name": dataset_name, "file_names": [filename]}
+        dataset = {"name": dataset_name, "file_names": [filename]}
         dataset_response = auth_session().post(
             TDS_URL + "/datasets",
             json=dataset,
             headers={"Content-Type": "application/json"},
         )
+        dataset_id = ""
         if dataset_response.status_code >= 300:
             raise Exception(
                 f"Failed to POSt dataset ({dataset_response.status_code}): {dataset['name']}"
             )
         else:
-            add_asset(dataset_response.json()["id"], "datasets", project_id)
+            dataset_id = dataset_response.json()["id"]
+            add_asset(dataset_id, "DATASET", project_id)
 
         url_response = auth_session().get(
-            TDS_URL + f"/datasets/{dataset_name}/upload-url",
+            TDS_URL + f"/datasets/{dataset_id}/upload-url",
             params={"filename": filename},
         )
         upload_url = url_response.json()["url"]

@@ -1,6 +1,5 @@
 {
-  "id": "LV-rabbits-wolves-model03-regnet",
-    "header": {
+  "header": {
     "name": "Lotka Volterra Rabbits Wolves Model 03",
     "schema": "https://raw.githubusercontent.com/DARPA-ASKEM/Model-Representations/regnet_v0.1/regnet/regnet_schema.json",
     "description": "Lotka Volterra model",
@@ -51,11 +50,11 @@
         "description": "Initial rabbit population",
         "value": 1.1,
         "distribution": {
-            "type": "Uniform1",
-            "parameters":{
-                "minimum": 1.0,
-                "maximum": 1.2
-            }
+          "type": "Uniform1",
+          "parameters": {
+            "minimum": 1.0,
+            "maximum": 1.2
+          }
         }
       },
       {
@@ -63,11 +62,11 @@
         "description": "Initial wolf population",
         "value": 1.0,
         "distribution": {
-            "type": "Uniform1",
-            "parameters":{
-                "minimum": 0.9,
-                "maximum": 1.1
-            }
+          "type": "Uniform1",
+          "parameters": {
+            "minimum": 0.9,
+            "maximum": 1.1
+          }
         }
       },
       {
@@ -75,11 +74,11 @@
         "description": "Maximum per capita prey growth rate",
         "value": 0.5,
         "distribution": {
-            "type": "Uniform1",
-            "parameters":{
-                "minimum": 0.45,
-                "maximum": 0.55
-            }
+          "type": "Uniform1",
+          "parameters": {
+            "minimum": 0.45,
+            "maximum": 0.55
+          }
         }
       },
       {
@@ -87,11 +86,11 @@
         "description": "Effect of predators on prey",
         "value": 0.5,
         "distribution": {
-            "type": "Uniform1",
-            "parameters":{
-                "minimum": 0.45,
-                "maximum": 0.55
-            }
+          "type": "Uniform1",
+          "parameters": {
+            "minimum": 0.45,
+            "maximum": 0.55
+          }
         }
       },
       {
@@ -99,11 +98,11 @@
         "description": "Effect of prey on predators",
         "value": 2.0,
         "distribution": {
-            "type": "Uniform1",
-            "parameters":{
-                "minimum": 1.9,
-                "maximum": 2.1
-            }
+          "type": "Uniform1",
+          "parameters": {
+            "minimum": 1.9,
+            "maximum": 2.1
+          }
         }
       },
       {
@@ -111,27 +110,27 @@
         "description": "Maximum per capita predator death rate",
         "value": 2.0,
         "distribution": {
-            "type": "Uniform1",
-            "parameters":{
-                "minimum": 1.9,
-                "maximum": 2.1
-            }
+          "type": "Uniform1",
+          "parameters": {
+            "minimum": 1.9,
+            "maximum": 2.1
+          }
         }
       }
     ],
-    "observables": [     
-        {
-             "id": "R",
-             "name": "rabbits",
-             "expression": "R",
-             "expression_mathml": "<ci>R</ci>"
-        },
-        {
-             "id": "W",
-             "name": "wolves",
-             "expression": "W",
-             "expression_mathml": "<ci>W</ci>"
-        }
+    "observables": [
+      {
+        "id": "R",
+        "name": "rabbits",
+        "expression": "R",
+        "expression_mathml": "<ci>R</ci>"
+      },
+      {
+        "id": "W",
+        "name": "wolves",
+        "expression": "W",
+        "expression_mathml": "<ci>W</ci>"
+      }
     ]
   }
 }
