@@ -1,5 +1,6 @@
 {
-  "header": {
+  "id": "LV-goats-chupacabra-regnet",
+    "header": {
     "name": "Lotka Volterra Goats Chupacabras",
     "schema": "https://raw.githubusercontent.com/DARPA-ASKEM/Model-Representations/regnet_v0.1/regnet/regnet_schema.json",
     "description": "Lotka Volterra model",
@@ -50,11 +51,11 @@
         "description": "Initial goat population",
         "value": 50,
         "distribution": {
-          "type": "Uniform1",
-          "parameters": {
-            "minimum": 45.0,
-            "maximum": 55.0
-          }
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 45.0,
+                "maximum": 55.0
+            }
         }
       },
       {
@@ -62,11 +63,11 @@
         "description": "Initial chupacabra population",
         "value": 6,
         "distribution": {
-          "type": "Uniform1",
-          "parameters": {
-            "minimum": 5.0,
-            "maximum": 10.0
-          }
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 5.0,
+                "maximum": 10.0
+            }
         }
       },
       {
@@ -74,11 +75,11 @@
         "description": "Maximum per capita prey growth rate",
         "value": 1.0,
         "distribution": {
-          "type": "Uniform1",
-          "parameters": {
-            "minimum": 0.9,
-            "maximum": 1.1
-          }
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 0.9,
+                "maximum": 1.1
+            }
         }
       },
       {
@@ -86,11 +87,11 @@
         "description": "Effect of predators on prey",
         "value": 0.2,
         "distribution": {
-          "type": "Uniform1",
-          "parameters": {
-            "minimum": 0.1,
-            "maximum": 0.3
-          }
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 0.1,
+                "maximum": 0.3
+            }
         }
       },
       {
@@ -98,11 +99,11 @@
         "description": "Effect of prey on predators",
         "value": 0.2,
         "distribution": {
-          "type": "Uniform1",
-          "parameters": {
-            "minimum": 0.1,
-            "maximum": 0.3
-          }
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 0.1,
+                "maximum": 0.3
+            }
         }
       },
       {
@@ -110,27 +111,27 @@
         "description": "Maximum per capita predator death rate",
         "value": 0.5,
         "distribution": {
-          "type": "Uniform1",
-          "parameters": {
-            "minimum": 0.45,
-            "maximum": 0.55
-          }
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 0.45,
+                "maximum": 0.55
+            }
         }
       }
     ],
-    "observables": [
-      {
-        "id": "G",
-        "name": "goat",
-        "expression": "G",
-        "expression_mathml": "<ci>G</ci>"
-      },
-      {
-        "id": "C",
-        "name": "chupacabras",
-        "expression": "C",
-        "expression_mathml": "<ci>C</ci>"
-      }
+    "observables": [     
+        {
+             "id": "G",
+             "name": "goat",
+             "expression": "G",
+             "expression_mathml": "<ci>G</ci>"
+        },
+        {
+             "id": "C",
+             "name": "chupacabras",
+             "expression": "C",
+             "expression_mathml": "<ci>C</ci>"
+        }
     ]
   }
 }

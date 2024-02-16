@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "knowledge-middleware"
+version = "1.6.0"
+description = ""
+authors = ["Powell Fendley"]
+readme = "README.md"
+packages = [{include = "lib"}, {include = "worker"}, {include = "api"}, {include = "tests"}]
+
+[tool.poetry.dependencies]
+askem-extractions = { git = "https://github.com/ml4ai/ASKEM-TA1-DataModel.git" }
+python = "^3.10"
+redis = "^4.6.0"
+rq = "^1.15.1"
+pydantic = "^2.0.2"
+idna = "^3.4"
+python-multipart = "^0.0.6"
+pandas = "^2.0.3"
+requests = "^2.31.0"
+pydantic-settings = "^2.0.3"
+uvicorn = "^0.22.0"
+fastapi = "^0.100.0"
+pypdf = "^3.12.0"
+boto3 = "^1.28.44"
+
+[tool.poetry.group.dev.dependencies]
+service-test-tools = {git = "https://github.com/jataware/service-test-tools"}
+yamllint = "^1.32.0"
+poethepoet = "^0.22.0"
+pyyaml = "^6.0.1"
+pre-commit = "^3.3.3"
+
+
+[tool.poe.tasks]
+_test.script = "tests.report:test"
+_report.script = "tests.report:gen_report"
+report.sequence = ["_test", "_report"]
+report.ignore_fail = true
+
+
+[tool.pytest.ini_options]
+markers = ["resource"]
+python_files = ["tests/test_e2e.py"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

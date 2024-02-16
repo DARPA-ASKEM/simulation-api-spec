@@ -1,5 +1,6 @@
 {
-  "header": {
+  "id": "LV-rabbits-wolves-regnet",
+    "header": {
     "name": "Lotka Volterra Rabbits Wolves",
     "schema": "https://raw.githubusercontent.com/DARPA-ASKEM/Model-Representations/regnet_v0.1/regnet/regnet_schema.json",
     "description": "Lotka Volterra model",
@@ -50,11 +51,11 @@
         "description": "Initial rabbit population",
         "value": 2,
         "distribution": {
-          "type": "Uniform1",
-          "parameters": {
-            "minimum": 2.0,
-            "maximum": 5.0
-          }
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 2.0,
+                "maximum": 5.0
+            }
         }
       },
       {
@@ -62,11 +63,11 @@
         "description": "Initial wolf population",
         "value": 1,
         "distribution": {
-          "type": "Uniform1",
-          "parameters": {
-            "minimum": 1.0,
-            "maximum": 2.0
-          }
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 1.0,
+                "maximum": 2.0
+            }
         }
       },
       {
@@ -90,19 +91,19 @@
         "value": 1
       }
     ],
-    "observables": [
-      {
-        "id": "R",
-        "name": "rabbits",
-        "expression": "R",
-        "expression_mathml": "<ci>R</ci>"
-      },
-      {
-        "id": "W",
-        "name": "wolves",
-        "expression": "W",
-        "expression_mathml": "<ci>W</ci>"
-      }
+    "observables": [     
+        {
+             "id": "R",
+             "name": "rabbits",
+             "expression": "R",
+             "expression_mathml": "<ci>R</ci>"
+        },
+        {
+             "id": "W",
+             "name": "wolves",
+             "expression": "W",
+             "expression_mathml": "<ci>W</ci>"
+        }
     ]
   }
 }

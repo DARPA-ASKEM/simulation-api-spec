@@ -1,4 +1,5 @@
 {
+  "id": "sirhd",
   "header": {
     "name": "SIRHD",
     "schema": "https://raw.githubusercontent.com/DARPA-ASKEM/Model-Representations/petrinet_v0.5/petrinet/petrinet_schema.json",

@@ -1,4 +1,5 @@
 {
+  "id": "sir-stockflow",
   "header": {
     "name": "SIR Model",
     "schema": "https://raw.githubusercontent.com/DARPA-ASKEM/Model-Representations/stockflow_v0.1/stockflow/stockflow_schema.json",
@@ -30,10 +31,10 @@
         "id": "S",
         "name": "Susceptible",
         "grounding": {
-          "identifiers": {
-            "ido": "0000514"
+            "identifiers": {
+              "ido": "0000514"
+            }
           }
-        }
       },
       {
         "id": "I",
@@ -62,7 +63,7 @@
         "name": "tr",
         "expression": "1.0 * p_tr",
         "expression_mathml": "<apply><times/><cn>1.0</cn><ci>p_tr</ci></apply>"
-      }
+    }
     ],
     "links": [
       {
@@ -99,83 +100,83 @@
   },
   "semantics": {
     "ode": {
-      "parameters": [
+        "parameters": [
         {
-          "id": "p_cbeta",
-          "name": "p_cbeta",
-          "description": "transmission rate",
-          "value": 0.35,
-          "distribution": {
-            "type": "Uniform1",
-            "parameters": {
-              "minimum": 0.25,
-              "maximum": 0.45
+            "id": "p_cbeta",
+            "name": "p_cbeta",
+            "description": "transmission rate",
+            "value": 0.35,
+            "distribution": {
+              "type": "Uniform1",
+              "parameters":{
+                "minimum": 0.25,
+                "maximum": 0.45
+              }
             }
-          }
         },
         {
-          "id": "p_N",
-          "name": "p_N",
-          "description": "overall population",
-          "value": 1001
+            "id": "p_N",
+            "name": "p_N",
+            "description": "overall population",
+            "value": 1001
         },
         {
-          "id": "p_tr",
-          "name": "p_tr",
-          "description": "recovery time",
-          "value": 14,
-          "distribution": {
-            "type": "Uniform1",
-            "parameters": {
-              "minimum": 8,
-              "maximum": 20
+            "id": "p_tr",
+            "name": "p_tr",
+            "description": "recovery time",
+            "value": 14,
+            "distribution": {
+              "type": "Uniform1",
+              "parameters":{
+                "minimum": 8,
+                "maximum": 20
+              }
             }
-          }
         },
         {
-          "id": "S0",
-          "name": "S₀",
-          "description": "Total susceptible population at timestep 0",
-          "value": 1000
+            "id": "S0",
+            "name": "S₀",
+            "description": "Total susceptible population at timestep 0",
+            "value": 1000
         },
         {
-          "id": "I0",
-          "name": "I₀",
-          "description": "Total infected population at timestep 0",
-          "value": 1
+            "id": "I0",
+            "name": "I₀",
+            "description": "Total infected population at timestep 0",
+            "value": 1
         },
         {
-          "id": "R0",
-          "name": "R₀",
-          "description": "Total recovered population at timestep 0",
-          "value": 0
+            "id": "R0",
+            "name": "R₀",
+            "description": "Total recovered population at timestep 0",
+            "value": 0
         }
-      ],
-      "initials": [
+        ],
+        "initials": [
         {
-          "target": "S",
-          "expression": "S0",
-          "expression_mathml": "<ci>S0</ci>"
+            "target": "S",
+            "expression": "S0",
+            "expression_mathml": "<ci>S0</ci>"
         },
         {
-          "target": "I",
-          "expression": "I0",
-          "expression_mathml": "<ci>I0</ci>"
+            "target": "I",
+            "expression": "I0",
+            "expression_mathml": "<ci>I0</ci>"
         },
         {
-          "target": "R",
-          "expression": "R0",
-          "expression_mathml": "<ci>R0</ci>"
+            "target": "R",
+            "expression": "R0",
+            "expression_mathml": "<ci>R0</ci>"
         }
-      ],
-      "observables": [
+        ],
+        "observables": [     
         {
-          "id": "I",
-          "name": "infected",
-          "expression": "I",
-          "expression_mathml": "<ci>I</ci>"
+             "id": "I",
+             "name": "infected",
+             "expression": "I",
+             "expression_mathml": "<ci>I</ci>"
         }
-      ]
+       ]
     }
-  }
+}
 }

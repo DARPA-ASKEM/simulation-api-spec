@@ -1,5 +1,6 @@
 {
-  "header": {
+  "id": "LV-sheep-foxes-regnet",
+    "header": {
     "name": "Lotka Volterra Sheep Foxes",
     "schema": "https://raw.githubusercontent.com/DARPA-ASKEM/Model-Representations/regnet_v0.1/regnet/regnet_schema.json",
     "description": "Lotka Volterra model",
@@ -50,11 +51,11 @@
         "description": "Initial sheep population",
         "value": 100,
         "distribution": {
-          "type": "Uniform1",
-          "parameters": {
-            "minimum": 75.0,
-            "maximum": 125.0
-          }
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 75.0,
+                "maximum": 125.0
+            }
         }
       },
       {
@@ -62,11 +63,11 @@
         "description": "Initial fox population",
         "value": 8,
         "distribution": {
-          "type": "Uniform1",
-          "parameters": {
-            "minimum": 6.0,
-            "maximum": 10.0
-          }
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 6.0,
+                "maximum": 10.0
+            }
         }
       },
       {
@@ -74,11 +75,11 @@
         "description": "Maximum per capita prey growth rate",
         "value": 0.4,
         "distribution": {
-          "type": "Uniform1",
-          "parameters": {
-            "minimum": 0.3,
-            "maximum": 0.5
-          }
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 0.3,
+                "maximum": 0.5
+            }
         }
       },
       {
@@ -86,11 +87,11 @@
         "description": "Effect of predators on prey",
         "value": 0.4,
         "distribution": {
-          "type": "Uniform1",
-          "parameters": {
-            "minimum": 0.3,
-            "maximum": 0.5
-          }
+            "type": "Uniform1",
+            "parameters":{
+                "minimum": 0.3,
+                "maximum": 0.5
+            }
         }
       },
       {
@@ -104,19 +105,19 @@
         "value": 0.09
       }
     ],
-    "observables": [
-      {
-        "id": "S",
-        "name": "sheep",
-        "expression": "S",
-        "expression_mathml": "<ci>S</ci>"
-      },
-      {
-        "id": "F",
-        "name": "foxes",
-        "expression": "F",
-        "expression_mathml": "<ci>F</ci>"
-      }
+    "observables": [     
+        {
+             "id": "S",
+             "name": "sheep",
+             "expression": "S",
+             "expression_mathml": "<ci>S</ci>"
+        },
+        {
+             "id": "F",
+             "name": "foxes",
+             "expression": "F",
+             "expression_mathml": "<ci>F</ci>"
+        }
     ]
   }
 }
