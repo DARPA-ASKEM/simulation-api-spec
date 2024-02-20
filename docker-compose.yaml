@@ -111,9 +111,9 @@ services:
       - BUCKET
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
-      - TDS_URL
-      - TDS_USER
-      - TDS_PASSWORD
+      - TDS_URL="http://hmi-server:3000"
+      - TDS_USER="api-service"
+      - TDS_PASSWORD="agent bio terraform"
       - PROJECT_ID
     depends_on:
       pyciemss-api:

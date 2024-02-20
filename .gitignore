@@ -156,6 +156,9 @@ cython_debug/
 # Project specific
 reports/
 /tests/project_id.txt
+/tests/datasets.json
+/tests/model_configs.json
+/tests/models.json
 
 #IDEs
 .idea
