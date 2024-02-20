@@ -48,8 +48,7 @@ components:
             new name (value). Note that we currently expect the unmapped columns
             to still be used in the model. There is currently no dropping.
             NOTE - we may eventually change this so that only mapped columns
-            are the ones that are used.
-          "
+            are the ones that are used."
     Interventions:
       type: array
       description: "A list of all interventions where each variable at each timestep is separated"
@@ -66,8 +65,7 @@ components:
             A key-value pair that indicates how the observables will be used in
             map to the ensembled model. The key is the name of the state in the
             ensembled model and the value is the observable in the individual
-            model that will be used to map to the ensembled state.
-          "
+            model that will be used to map to the ensembled state."
         weight:
           type: number
           description: "How much the model should affect the final result. Must be between 0 and 1."
@@ -141,7 +139,7 @@ paths:
 
   /calibrate:
     post:
-      summary: Calibrate a model to data then simulate
+      summary: Calibrate a model to data
       description: Calibrate a model and perform a "fitting" simulation over the time range of the calibration dataset and a simulation of a time range specified in `timespan` if `timespan` is specified. NOTICE - This will be changed soon to NOT perform a simulation after calibration
       operationId: calibratesimulateModel
       requestBody:
@@ -169,7 +167,7 @@ paths:
                 - dataset
       responses:
         '200':
-          description: Calibration/simulation created successfully
+          description: Calibration created successfully
           content:
             application/json:
               schema:
@@ -178,7 +176,72 @@ paths:
                   simulation_id:
                     type: string
                     example: fc5d80e4-0483-11ee-be56
-  
+  /optimize:
+    post:
+      summary: Find optimization for given interventions
+      operationId: operate_optimize_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                engine:
+                  $ref: '#/components/schemas/Engine'
+                model_config_id:
+                  type: string
+                  example: "c1cd941a-047d-11ee-be56"
+                timespan:
+                    $ref: '#/components/schemas/Timespan'
+                interventions:
+                   $ref: '#/components/schemas/Interventions'                  
+                step_size:
+                  title: Step Size
+                  type: number
+                  default: 1
+                qoi:
+                  title: Quantities of Interest
+                  description: "Compartments to optimize"
+                  type: array
+                  items:
+                    type: string
+                risk_bound:
+                  title: Risk Bound
+                  type: number
+                initial_guess_interventions:
+                  title: Initial Guess Interventions
+                  type: array
+                  items:
+                    type: number
+                bounds_interventions:
+                  title: Bounds Interventions
+                  type: array
+                  items:
+                    type: array
+                    items:
+                      type: number
+                extra:
+                  description: optional extra system specific arguments for advanced use cases
+                  type: object
+              required:
+                - engine
+                - model_config_id
+                - qoi
+                - risk_bound
+                - initial_guess_interventions
+                - bounds_interventions
+      responses:
+        '200':
+          description: Optimization created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  simulation_id:
+                    type: string
+                    example: fc5d80e4-0483-11ee-be56
   /ensemble-simulate:
     post:
       summary: Perform an ensemble simulation
