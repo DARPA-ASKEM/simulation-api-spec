@@ -53,8 +53,13 @@ def eval_integration(sim_id, service_name, endpoint, request):
             if PROJECT_ID:
                 project_id = PROJECT_ID
             else:
-                with open("project_id.txt", "r") as f:
-                    project_id = f.read()
+                try:
+                    with open("project_id.txt", "r") as f:
+                        project_id = f.read()
+                except:
+                    raise Exception(
+                        "No PROJECT_ID found in environment and no project_id.txt file found"
+                    )
 
             add_asset(sim_id, "SIMULATION", project_id)
     return {
@@ -86,8 +91,13 @@ def add_workflow(workflow_payload):
         if PROJECT_ID:
             project_id = PROJECT_ID
         else:
-            with open("project_id.txt", "r") as f:
-                project_id = f.read()
+            try:
+                with open("project_id.txt", "r") as f:
+                    project_id = f.read()
+            except:
+                raise Exception(
+                    "No PROJECT_ID found in environment and no project_id.txt file found"
+                )
 
         workflow_id = workflow_response.json()["id"]
         add_asset(workflow_id, "WORKFLOW", project_id)
@@ -128,8 +138,13 @@ def gen_report():
     if PROJECT_ID:
         project_id = PROJECT_ID
     else:
-        with open("project_id.txt", "r") as f:
-            project_id = f.read()
+        try:
+            with open("project_id.txt", "r") as f:
+                project_id = f.read()
+        except:
+            raise Exception(
+                "No PROJECT_ID found in environment and no project_id.txt file found"
+            )
 
     with open('models.json') as json_file:
         models_dict = json.load(json_file)

@@ -28,7 +28,7 @@ if __name__ == "__main__":
             )
 
         # if the project exists, remove all simulations from it
-        types = ["simulations"]
+        types = ["SIMULATION"]
         sim_resp = auth_session().get(
             f"{TDS_URL}/projects/{project_id}/assets", params={"types": types}
         )
@@ -53,6 +53,9 @@ if __name__ == "__main__":
             f"No project ID found in environment. Created project with ID: {project_id}"
         )
 
+    logging.info(
+        f"Created project with ID: {project_id}. Writing this to project_id.txt for future use."
+    )
     with open("project_id.txt", "w") as f:
         f.write(f"{project_id}")
 
