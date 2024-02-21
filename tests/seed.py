@@ -56,7 +56,7 @@ if __name__ == "__main__":
     with open("project_id.txt", "w") as f:
         f.write(f"{project_id}")
 
-    model_configs = glob("../data/models/*.json")
+    model_configs = glob("./data/models/*.json")
     for config_path in model_configs:
         obj = json.load(open(config_path, "rb"))
         data_id = ""
@@ -100,7 +100,7 @@ if __name__ == "__main__":
             config_id = config_response.json()["id"]
             model_configs_dict[data_id] = config_id
 
-    datasets = glob("../data/datasets/*.csv")
+    datasets = glob("./data/datasets/*.csv")
     for filepath in datasets:
         filename = filepath.split("/")[-1]
         dataset_name = filename.split(".")[0]

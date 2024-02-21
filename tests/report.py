@@ -152,7 +152,7 @@ def gen_report():
     for scenario in scenarios:
         scenario_spec = {}
         for backend in ["pyciemss", "sciml"]:
-            path = f"../scenarios/{scenario}/{backend}"
+            path = f"./scenarios/{scenario}/{backend}"
             if os.path.exists(path):
                 scenario_spec[backend] = [
                     f
@@ -162,7 +162,7 @@ def gen_report():
         for service_name, tests in scenario_spec.items():
             for test_file in tests:
                 test = test_file.split(".")[0]
-                file = open(f"../scenarios/{scenario}/{service_name}/{test_file}", "rb")
+                file = open(f"./scenarios/{scenario}/{service_name}/{test_file}", "rb")
                 logging.info(f"Trying `/{test}` ({service_name}, {scenario})")
                 file_json = json.load(file)
 
