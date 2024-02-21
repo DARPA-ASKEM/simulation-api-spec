@@ -45,7 +45,7 @@ def add_asset(resource_id, resource_type, project_id):
     resp = auth_session().post(
         f"{TDS_URL}/projects/{project_id}/assets/{resource_type}/{resource_id}"
     )
-    if resp.status_code == 409:
+    if resp.status_code == 304:
         logging.info(
             f"Asset {resource_id} of type {resource_type} already exists in project {project_id}"
         )
@@ -62,9 +62,9 @@ def add_asset(resource_id, resource_type, project_id):
     provenance_payload = {
         "relation_type": "CONTAINS",
         "left": project_id,
-        "left_type": "Project",
+        "left_type": "PROJECT",
         "right": resource_id,
-        "right_type": resource_type,  # Converts "models" to "Model", etc.
+        "right_type": resource_type,
     }
     prov_resp = auth_session().post(f"{TDS_URL}/provenance", json=provenance_payload)
 

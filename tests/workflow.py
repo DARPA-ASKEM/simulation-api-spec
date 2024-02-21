@@ -1,16 +1,23 @@
 import uuid
+import os
+from auth import auth_session
+
+
+TDS_URL = os.environ.get("TDS_URL", "http://hmi-server:3000")
 
 
 def generate_workflow(workflow_name, workflow_description):
-    workflow_id = workflow_name.lower()
+
     workflow_payload = {
-        "id": workflow_id,
         "name": workflow_name,
         "description": workflow_description,
         "transform": {"x": 0, "y": 0, "k": 1},
         "nodes": [],
         "edges": [],
     }
+
+    resp = auth_session().post(f"{TDS_URL}/workflows", json=workflow_payload)
+    workflow_id = resp.json()["id"]
 
     return workflow_payload, workflow_id
 
@@ -64,7 +71,6 @@ def generate_model_module(model_id, workflow_id, model_config_id=None, model_num
 
 def generate_dataset_module(dataset_id, workflow_id):
     module_uuid = str(uuid.uuid4())
-
     dataset_output_uuid = str(uuid.uuid4())
 
     dataset_module_payload = {
@@ -90,17 +96,39 @@ def generate_dataset_module(dataset_id, workflow_id):
         "height": 220,
     }
 
-    return dataset_module_payload, module_uuid, dataset_output_uuid
+    return (
+        dataset_module_payload,
+        module_uuid,
+        dataset_output_uuid
+    )
 
 
 def generate_calibrate_simulate_ciemms_module(
-    workflow_id, config_id, dataset_id, simulation_output, timespan, extra
+    project_id, workflow_id, config_id, dataset_id, timespan, extra
 ):
     module_uuid = str(uuid.uuid4())
-
     config_uuid = str(uuid.uuid4())
     dataset_uuid = str(uuid.uuid4())
     sim_output_uuid = str(uuid.uuid4())
+
+    simulation_payload={
+        "execution_payload": {},
+        "name": "CalibrationOperationCiemss",
+        "type": "CALIBRATION",
+        "engine": "CIEMSS",
+        "workflow_id": workflow_id,
+        "project_id": project_id
+    }
+    simulation_resp = auth_session().post(
+        f"{TDS_URL}/simulations",
+        json=simulation_payload
+    )
+    if simulation_resp.status_code >= 300:
+        raise Exception(
+            f"Failed to create simulation ({simulation_resp.status_code} {simulation_resp.text})"
+        )
+
+    sim_id = simulation_resp.json()["id"]
 
     module_payload = {
         "id": module_uuid,
@@ -111,7 +139,7 @@ def generate_calibrate_simulate_ciemms_module(
         "y": 200,
         "state": {
             "chartConfigs": [
-                {"selectedRun": simulation_output, "selectedVariable": []}
+                {"selectedRun": sim_id, "selectedVariable": []}
             ],
             "mapping": [{"modelVariable": "", "datasetVariable": ""}],
             "simulationsInProgress": [],
@@ -139,7 +167,7 @@ def generate_calibrate_simulate_ciemms_module(
                 "id": sim_output_uuid,
                 "type": "number",
                 "label": "Output 1",
-                "value": [{"runId": simulation_output}],
+                "value": [{"runId": sim_id}],
                 "status": "not connected",
             }
         ],
@@ -148,16 +176,40 @@ def generate_calibrate_simulate_ciemms_module(
         "height": 220,
     }
 
-    return module_payload, module_uuid, config_uuid, dataset_uuid
+    return (
+        module_payload,
+        sim_id,
+        module_uuid,
+        config_uuid,
+        dataset_uuid
+    )
 
 
 def generate_simulate_ciemms_module(
-    workflow_id, config_id, simulation_output, timespan, extra
+    project_id, workflow_id, config_id, timespan, extra
 ):
     module_uuid = str(uuid.uuid4())
-
     config_uuid = str(uuid.uuid4())
     sim_output_uuid = str(uuid.uuid4())
+
+    simulation_payload={
+        "execution_payload": {},
+        "name": "SimulateCiemssOperation",
+        "type": "SIMULATION",
+        "engine": "CIEMSS",
+        "workflow_id": workflow_id,
+        "project_id": project_id
+    }
+    simulation_resp = auth_session().post(
+        f"{TDS_URL}/simulations",
+        json=simulation_payload
+    )
+    if simulation_resp.status_code >= 300:
+        raise Exception(
+            f"Failed to create simulation ({simulation_resp.status_code} {simulation_resp.text})"
+        )
+
+    sim_id = simulation_resp.json()["id"]
 
     module_payload = {
         "id": module_uuid,
@@ -169,8 +221,8 @@ def generate_simulate_ciemms_module(
         "state": {
             "simConfigs": {
                 "runConfigs": {
-                    simulation_output: {
-                        "runId": simulation_output,
+                    sim_id: {
+                        "runId": sim_id,
                         "active": True,
                         "configName": "Model configuration",
                         "timeSpan": timespan,
@@ -201,7 +253,7 @@ def generate_simulate_ciemms_module(
                 "id": sim_output_uuid,
                 "type": "simOutput",
                 "label": "Output 1",
-                "value": [simulation_output],
+                "value": [sim_id],
                 "status": "not connected",
             }
         ],
@@ -210,17 +262,40 @@ def generate_simulate_ciemms_module(
         "height": 220,
     }
 
-    return module_payload, module_uuid, config_uuid
+    return (
+        module_payload,
+        sim_id,
+        module_uuid,
+        config_uuid
+    )
 
 
 def generate_calibrate_ensemble_ciemss_module(
-    workflow_id, config_ids, dataset_id, simulation_output, timespan, extra
+    project_id, workflow_id, config_ids, dataset_id, timespan, extra
 ):
     module_uuid = str(uuid.uuid4())
-
     config_uuid = str(uuid.uuid4())
     dataset_uuid = str(uuid.uuid4())
-    sim_output_uuid = str(uuid.uuid4())
+    sim_uuid = str(uuid.uuid4())
+
+    simulation_payload={
+        "execution_payload": {},
+        "name": "CalibrateEnsembleCiemms",
+        "type": "ENSEMBLE",
+        "engine": "CIEMSS",
+        "workflow_id": workflow_id,
+        "project_id": project_id
+    }
+    simulation_resp = auth_session().post(
+        f"{TDS_URL}/simulations",
+        json=simulation_payload
+    )
+    if simulation_resp.status_code >= 300:
+        raise Exception(
+            f"Failed to create simulation ({simulation_resp.status_code} {simulation_resp.text})"
+        )
+
+    sim_id = simulation_resp.json()["id"]
 
     module_payload = {
         "id": module_uuid,
@@ -231,7 +306,7 @@ def generate_calibrate_ensemble_ciemss_module(
         "y": 200,
         "state": {
             "chartConfigs": [
-                {"selectedRun": simulation_output, "selectedVariable": []}
+                {"selectedRun": sim_id, "selectedVariable": []}
             ],
             "mapping": [{"modelVariable": "", "datasetVariable": ""}],
             "simulationsInProgress": [],
@@ -257,10 +332,10 @@ def generate_calibrate_ensemble_ciemss_module(
         ],
         "outputs": [
             {
-                "id": sim_output_uuid,
+                "id": sim_uuid,
                 "type": "number",
                 "label": "Output 1",
-                "value": [{"runId": simulation_output}],
+                "value": [{"runId": sim_id}],
                 "status": "not connected",
             }
         ],
@@ -269,16 +344,34 @@ def generate_calibrate_ensemble_ciemss_module(
         "height": 220,
     }
 
-    return module_payload, module_uuid, config_uuid, dataset_uuid
+    return module_payload, sim_id
 
 
 def generate_simulate_ensemble_ciemms_module(
-    workflow_id, config_ids, simulation_output, timespan, extra
+    project_id, workflow_id, config_ids, timespan, extra
 ):
     module_uuid = str(uuid.uuid4())
-
     config_uuid = str(uuid.uuid4())
     sim_output_uuid = str(uuid.uuid4())
+
+    simulation_payload={
+        "execution_payload": {},
+        "name": "SimulateEnsembleCiemms",
+        "type": "ENSEMBLE",
+        "engine": "CIEMSS",
+        "workflow_id": workflow_id,
+        "project_id": project_id
+    }
+    simulation_resp = auth_session().post(
+        f"{TDS_URL}/simulations",
+        json=simulation_payload
+    )
+    if simulation_resp.status_code >= 300:
+        raise Exception(
+            f"Failed to create simulation ({simulation_resp.status_code} {simulation_resp.text})"
+        )
+
+    sim_id = simulation_resp.json()["id"]
 
     module_payload = {
         "id": module_uuid,
@@ -289,7 +382,7 @@ def generate_simulate_ensemble_ciemms_module(
         "y": 200,
         "state": {
             "chartConfigs": [
-                {"selectedRun": simulation_output, "selectedVariable": []}
+                {"selectedRun": sim_id, "selectedVariable": []}
             ],
             "mapping": [{"modelVariable": "", "datasetVariable": ""}],
             "simulationsInProgress": [],
@@ -311,7 +404,7 @@ def generate_simulate_ensemble_ciemms_module(
                 "id": sim_output_uuid,
                 "type": "number",
                 "label": "Output 1",
-                "value": [{"runId": simulation_output}],
+                "value": [{"runId": sim_id}],
                 "status": "not connected",
             }
         ],
@@ -320,17 +413,35 @@ def generate_simulate_ensemble_ciemms_module(
         "height": 220,
     }
 
-    return module_payload, module_uuid, config_uuid
+    return module_payload, sim_id, module_uuid, config_uuid
 
 
 # "Simulate (deterministic)"
 def generate_simulate_sciml_module(
-    workflow_id, model_id, simulation_output, timespan, extra
+    project_id, workflow_id, model_id, timespan, extra
 ):
     module_uuid = str(uuid.uuid4())
-
     config_uuid = str(uuid.uuid4())
     sim_output_uuid = str(uuid.uuid4())
+
+    simulation_payload={
+        "execution_payload": {},
+        "name": "SimulateJuliaOperation",
+        "type": "SIMULATION",
+        "engine": "SCIML",
+        "workflow_id": workflow_id,
+        "project_id": project_id
+    }
+    simulation_resp = auth_session().post(
+        f"{TDS_URL}/simulations",
+        json=simulation_payload
+    )
+    if simulation_resp.status_code >= 300:
+        raise Exception(
+            f"Failed to create simulation ({simulation_resp.status_code} {simulation_resp.text})"
+        )
+
+    sim_id = simulation_resp.json()["id"]
 
     module_payload = {
         "id": module_uuid,
@@ -344,8 +455,8 @@ def generate_simulate_sciml_module(
             "simConfigs": {
                 "chartConfigs": [],
                 "runConfigs": {
-                    simulation_output: {
-                        "runId": simulation_output,
+                    sim_id: {
+                        "runId": sim_id,
                         "active": True,
                         "configName": "Model configuration",
                         "timeSpan": timespan,
@@ -370,7 +481,7 @@ def generate_simulate_sciml_module(
                 "id": sim_output_uuid,
                 "type": "simOutput",
                 "label": "Output 1",
-                "value": [simulation_output],
+                "value": [sim_id],
                 "status": "not connected",
             }
         ],
@@ -379,18 +490,36 @@ def generate_simulate_sciml_module(
         "height": 220,
     }
 
-    return module_payload, module_uuid, config_uuid
+    return module_payload, sim_id, module_uuid, config_uuid
 
 
 # "Calibrate (deterministic)"
 def generate_calibrate_sciml_module(
-    workflow_id, model_id, dataset_id, simulation_output, timespan, extra
+    project_id, workflow_id, model_id, dataset_id, timespan, extra
 ):
     module_uuid = str(uuid.uuid4())
-
     config_uuid = str(uuid.uuid4())
     dataset_uuid = str(uuid.uuid4())
     sim_output_uuid = str(uuid.uuid4())
+
+    simulation_payload={
+        "execution_payload": {},
+        "name": "SimulateJuliaOperation",
+        "type": "SIMULATION",
+        "engine": "SCIML",
+        "workflow_id": workflow_id,
+        "project_id": project_id
+    }
+    simulation_resp = auth_session().post(
+        f"{TDS_URL}/simulations",
+        json=simulation_payload
+    )
+    if simulation_resp.status_code >= 300:
+        raise Exception(
+            f"Failed to create simulation ({simulation_resp.status_code} {simulation_resp.text})"
+        )
+
+    sim_id = simulation_resp.json()["id"]
 
     module_payload = {
         "id": module_uuid,
@@ -403,8 +532,8 @@ def generate_calibrate_sciml_module(
             "chartConfigs": [],
             "calibrateConfigs": {
                 "runConfigs": {
-                    simulation_output: {
-                        "runId": simulation_output,
+                    sim_id: {
+                        "runId": sim_id,
                         "active": True,
                         "loss": [],
                     }
@@ -438,7 +567,7 @@ def generate_calibrate_sciml_module(
                 "id": sim_output_uuid,
                 "type": "number",
                 "label": "Output 1",
-                "value": [simulation_output],
+                "value": [sim_id],
                 "status": "not connected",
             }
         ],
@@ -447,7 +576,7 @@ def generate_calibrate_sciml_module(
         "height": 220,
     }
 
-    return module_payload, module_uuid, config_uuid, dataset_uuid
+    return module_payload, sim_id, module_uuid, config_uuid, dataset_uuid
 
 
 def generate_edge(workflow_id, source_id, target_id, source_port, target_port):
@@ -474,11 +603,11 @@ def generate_edge(workflow_id, source_id, target_id, source_port, target_port):
 
 
 def workflow_builder(
+    project_id,
     workflow_name,
     workflow_description,
     simulation_type,
     model_id,
-    simulation_output,
     dataset_id=None,
     config_ids=[],  # for ensemble
     timespan=None,
@@ -488,17 +617,8 @@ def workflow_builder(
         workflow_name, workflow_description
     )
 
-    if model_id:
-        (
-            model_payload,
-            model_module_uuid,
-            config_output_uuid,
-            default_config_output_uuid,
-        ) = generate_model_module(model_id, workflow_id, model_id)
-
-        workflow_payload["nodes"].append(model_payload)
-
-    if config_ids:
+    # if the length of config_ids is greater than 1, then we are building an ensemble workflow
+    if len(config_ids) > 1:
         config_uuids = []
         model_num = 0
         for id in config_ids:
@@ -512,6 +632,15 @@ def workflow_builder(
             workflow_payload["nodes"].append(model_payload)
             config_uuids.append(config_output_uuid)
             model_num += 1
+    elif model_id:
+        (
+            model_payload,
+            model_module_uuid,
+            config_output_uuid,
+            default_config_output_uuid,
+        ) = generate_model_module(model_id, workflow_id, model_id)
+
+        workflow_payload["nodes"].append(model_payload)
 
     if dataset_id:
         (
@@ -526,11 +655,12 @@ def workflow_builder(
         case "calibrate_pyciemss":
             (
                 calibrate_simulate_payload,
+                sim_id,
                 calibrate_simulation_uuid,
                 config_input_uuid,
                 dataset_input_uuid,
             ) = generate_calibrate_simulate_ciemms_module(
-                workflow_id, model_id, dataset_id, simulation_output, timespan, extra
+                project_id, workflow_id, model_id, dataset_id, timespan, extra
             )
             workflow_payload["nodes"].append(calibrate_simulate_payload)
 
@@ -552,15 +682,16 @@ def workflow_builder(
             )
             workflow_payload["edges"].append(dataset_simulate_edge)
 
-            return workflow_payload
+            return workflow_payload, workflow_id, sim_id
 
         case "simulate_pyciemss":
             (
                 simulate_ciemss_payload,
+                sim_id,
                 simulate_ciemss_uuid,
                 config_input_uuid,
             ) = generate_simulate_ciemms_module(
-                workflow_id, model_id, simulation_output, timespan, extra
+                project_id, workflow_id, model_id, timespan, extra
             )
             workflow_payload["nodes"].append(simulate_ciemss_payload)
 
@@ -573,18 +704,20 @@ def workflow_builder(
             )
             workflow_payload["edges"].append(model_simulate_edge)
 
-            return workflow_payload
+            return workflow_payload, workflow_id, sim_id
+
         case "ensemble-calibrate_pyciemss":
             (
                 calibrate_ensemble_payload,
+                sim_id,
                 calibrate_ensemble_uuid,
                 config_input_uuid,
                 dataset_input_uuid,
             ) = generate_calibrate_ensemble_ciemss_module(
+                project_id,
                 workflow_id,
                 config_ids=config_ids,
                 dataset_id=dataset_id,
-                simulation_output=simulation_output,
                 timespan=timespan,
                 extra=extra,
             )
@@ -609,16 +742,18 @@ def workflow_builder(
             )
             workflow_payload["edges"].append(dataset_simulate_edge)
 
-            return workflow_payload
+            return workflow_payload, workflow_id, sim_id
+
         case "ensemble-simulate_pyciemss":
             (
                 simulate_ensemble_payload,
+                sim_id,
                 simulate_ensemble_uuid,
                 config_input_uuid,
             ) = generate_simulate_ensemble_ciemms_module(
+                project_id,
                 workflow_id,
                 config_ids=config_ids,
-                simulation_output=simulation_output,
                 timespan=timespan,
                 extra=extra,
             )
@@ -634,14 +769,16 @@ def workflow_builder(
                 )
                 workflow_payload["edges"].append(model_simulate_edge)
 
-            return workflow_payload
+            return workflow_payload, workflow_id, sim_id
+
         case "simulate_sciml":
             (
                 simulate_sciml_payload,
+                sim_id,
                 simulate_sciml_uuid,
                 config_input_uuid,
             ) = generate_simulate_sciml_module(
-                workflow_id, model_id, simulation_output, timespan, extra
+                project_id, workflow_id, model_id, timespan, extra
             )
             workflow_payload["nodes"].append(simulate_sciml_payload)
 
@@ -654,15 +791,17 @@ def workflow_builder(
             )
             workflow_payload["edges"].append(model_simulate_edge)
 
-            return workflow_payload
+            return workflow_payload, workflow_id, sim_id
+
         case "calibrate_sciml":
             (
                 calibrate_sciml_payload,
+                sim_id,
                 calibrate_sciml_uuid,
                 config_input_uuid,
                 dataset_input_uuid,
             ) = generate_calibrate_sciml_module(
-                workflow_id, model_id, dataset_id, simulation_output, timespan, extra
+                project_id, workflow_id, model_id, dataset_id, timespan, extra
             )
             workflow_payload["nodes"].append(calibrate_sciml_payload)
 
@@ -684,4 +823,4 @@ def workflow_builder(
             )
             workflow_payload["edges"].append(dataset_simulate_edge)
 
-            return workflow_payload
+            return workflow_payload, workflow_id, sim_id
