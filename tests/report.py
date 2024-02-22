@@ -25,7 +25,7 @@ UPLOAD = os.environ.get("UPLOAD", "FALSE").lower() == "true"
 PROJECT_ID = os.environ.get("PROJECT_ID", None)
 
 
-def eval_integration(sim_id, service_name, endpoint, request):
+def eval_integration(service_name, endpoint, request):
     start_time = time()
     is_success = False
     base_url = PYCIEMSS_URL if service_name == "pyciemss" else SCIML_URL
@@ -184,6 +184,10 @@ def gen_report():
                         logging.info(f"replacing model_config id:{config.get('id')} with {model_configs_dict.get(config.get('id'))}")
                         config["id"] = model_configs_dict.get(config.get("id"))
 
+                eval_report = eval_integration(service_name, test, file_json)
+                logging.info(f"logging scenario: {service_name}:{scenario}:{test} with report: {eval_report}")
+                report["scenarios"][service_name][scenario][test] = eval_report
+
                 # Start workflow creation
                 try:
                     # Setting up variables for workflow creation
@@ -228,11 +232,6 @@ def gen_report():
 
                 except Exception as e:
                     logging.error(f"Workflow creation failed: {e}")
-
-                if sim_id is not None:
-                    file_json["id"] = sim_id
-                    eval_report = eval_integration(sim_id, service_name, test, file_json)
-                    report["scenarios"][service_name][scenario][test] = eval_report
 
                 logging.info(f"Completed `/{test}` ({service_name}, {scenario})")
     return report
