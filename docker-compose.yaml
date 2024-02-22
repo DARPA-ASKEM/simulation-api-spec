@@ -122,6 +122,8 @@ services:
         condition: service_started
       sciml-service:
         condition: service_healthy
+      hmi-server:
+        condition: service_healthy
     volumes:
       - report:/outputs
     extra_hosts:
