@@ -38,34 +38,22 @@ def eval_integration(sim_id, service_name, endpoint, request):
         f"Kicked request: {kickoff_request.status_code} {kickoff_request.text}"
     )
     if kickoff_request.status_code < 300:
-        logging.info(f"Simulation ID: {sim_id}")
-        get_status = lambda: requests.get(f"{base_url}/status/{sim_id}").json()[
+        simulation_id = kickoff_request.json()["simulation_id"]
+        logging.info(f"Simulation ID: {simulation_id}")
+        get_status = lambda: requests.get(f"{base_url}/status/{simulation_id}").json()[
             "status"
         ]
         while get_status() in ["queued", "running"]:
             sleep(1)
         if get_status() == "complete":
-            logging.info(f"Completed status on simulation: {sim_id}")
+            logging.info(f"Completed status on simulation: {simulation_id}")
             is_success = True
             # Add artifacts from simulations to TDS depending on what test is being run:
             # 1) Simulation in TDS
-
-            if PROJECT_ID:
-                project_id = PROJECT_ID
-            else:
-                try:
-                    with open("project_id.txt", "r") as f:
-                        project_id = f.read()
-                except:
-                    raise Exception(
-                        "No PROJECT_ID found in environment and no project_id.txt file found"
-                    )
-
-            add_asset(sim_id, "SIMULATION", project_id)
     return {
         "Integration Status": is_success,
         "Execution Time": time() - start_time,
-    }, sim_id
+    }
 
 
 def add_workflow(workflow_payload):
@@ -234,16 +222,17 @@ def gen_report():
                         extra=extra,
                     )
 
-                    # Post created workflow to TDS and add to project
+                    # put updated workflow to hmi-server
                     update_workflow(workflow_id, workflow_payload=workflow)
                     logging.info(f"Workflow updated: {workflow}")
 
                 except Exception as e:
                     logging.error(f"Workflow creation failed: {e}")
 
-                file_json["id"] = sim_id
-                eval_report = eval_integration(sim_id, service_name, test, file_json)
-                report["scenarios"][service_name][scenario][test] = eval_report
+                if sim_id is not None:
+                    file_json["id"] = sim_id
+                    eval_report = eval_integration(sim_id, service_name, test, file_json)
+                    report["scenarios"][service_name][scenario][test] = eval_report
 
                 logging.info(f"Completed `/{test}` ({service_name}, {scenario})")
     return report

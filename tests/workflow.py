@@ -1,6 +1,9 @@
 import uuid
 import os
+import logging
+
 from auth import auth_session
+from utils import add_asset
 
 
 TDS_URL = os.environ.get("TDS_URL", "http://hmi-server:3000")
@@ -129,6 +132,8 @@ def generate_calibrate_simulate_ciemms_module(
         )
 
     sim_id = simulation_resp.json()["id"]
+    add_asset(sim_id, "SIMULATION", project_id)
+    logging.info(f"simulation ID : {sim_id}")
 
     module_payload = {
         "id": module_uuid,
@@ -210,6 +215,8 @@ def generate_simulate_ciemms_module(
         )
 
     sim_id = simulation_resp.json()["id"]
+    add_asset(sim_id, "SIMULATION", project_id)
+    logging.info(f"simulation ID : {sim_id}")
 
     module_payload = {
         "id": module_uuid,
@@ -296,6 +303,8 @@ def generate_calibrate_ensemble_ciemss_module(
         )
 
     sim_id = simulation_resp.json()["id"]
+    add_asset(sim_id, "SIMULATION", project_id)
+    logging.info(f"simulation ID : {sim_id}")
 
     module_payload = {
         "id": module_uuid,
@@ -372,6 +381,8 @@ def generate_simulate_ensemble_ciemms_module(
         )
 
     sim_id = simulation_resp.json()["id"]
+    add_asset(sim_id, "SIMULATION", project_id)
+    logging.info(f"simulation ID : {sim_id}")
 
     module_payload = {
         "id": module_uuid,
@@ -442,6 +453,8 @@ def generate_simulate_sciml_module(
         )
 
     sim_id = simulation_resp.json()["id"]
+    add_asset(sim_id, "SIMULATION", project_id)
+    logging.info(f"simulation ID : {sim_id}")
 
     module_payload = {
         "id": module_uuid,
@@ -520,6 +533,8 @@ def generate_calibrate_sciml_module(
         )
 
     sim_id = simulation_resp.json()["id"]
+    add_asset(sim_id, "SIMULATION", project_id)
+    logging.info(f"simulation ID : {sim_id}")
 
     module_payload = {
         "id": module_uuid,
@@ -721,6 +736,8 @@ def workflow_builder(
                 timespan=timespan,
                 extra=extra,
             )
+            logging.info(f"generated ensemble-calibrate_pyciemss simulation")
+
             workflow_payload["nodes"].append(calibrate_ensemble_payload)
 
             for id in config_uuids:
@@ -824,3 +841,6 @@ def workflow_builder(
             workflow_payload["edges"].append(dataset_simulate_edge)
 
             return workflow_payload, workflow_id, sim_id
+
+    logging.info(f"Unable to find simulation type, return simple workflow: {workflow_payload}")
+    return workflow_payload, workflow_id, None
