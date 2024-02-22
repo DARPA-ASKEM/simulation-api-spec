@@ -1,6 +1,5 @@
 {
   "engine": "sciml",
-  "username": "not_provided",
   "model_config_id": "seirhd-npi-type1-petrinet",
   "dataset": {
     "id": "traditional",

@@ -3,10 +3,13 @@ import os
 import requests
 import logging
 
+from auth import auth_session
+
+
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
 
-TDS_URL = os.environ.get("TDS_URL", "http://data-service:8000")
+TDS_URL = os.environ.get("TDS_URL", "http://hmi-server:3000")
 
 
 def create_project():
@@ -19,11 +22,9 @@ def create_project():
     project = {
         "name": "Integration Test Suite Project",
         "description": f"Test generated at {ts}",
-        "assets": [],
-        "active": True,
     }
 
-    resp = requests.post(f"{TDS_URL}/projects", json=project)
+    resp = auth_session().post(f"{TDS_URL}/projects", json=project)
     project_id = resp.json()["id"]
 
     return project_id
@@ -41,10 +42,10 @@ def add_asset(resource_id, resource_type, project_id):
     logging.info(
         f"Adding asset {resource_id} of type {resource_type} to project {project_id}"
     )
-    resp = requests.post(
+    resp = auth_session().post(
         f"{TDS_URL}/projects/{project_id}/assets/{resource_type}/{resource_id}"
     )
-    if resp.status_code == 409:
+    if resp.status_code == 304:
         logging.info(
             f"Asset {resource_id} of type {resource_type} already exists in project {project_id}"
         )
@@ -61,13 +62,11 @@ def add_asset(resource_id, resource_type, project_id):
     provenance_payload = {
         "relation_type": "CONTAINS",
         "left": project_id,
-        "left_type": "Project",
+        "left_type": "PROJECT",
         "right": resource_id,
-        "right_type": resource_type[
-            :-1
-        ].capitalize(),  # Converts "models" to "Model", etc.
+        "right_type": resource_type,
     }
-    prov_resp = requests.post(f"{TDS_URL}/provenance", json=provenance_payload)
+    prov_resp = auth_session().post(f"{TDS_URL}/provenance", json=provenance_payload)
 
     if prov_resp.status_code >= 300:
         logging.error(
