@@ -1,6 +1,5 @@
 {
   "engine": "ciemss",
-  "username": "not_provided",
   "model_config_id": "LV-sheep-foxes-regnet",
   "timespan": {
     "start": 0,

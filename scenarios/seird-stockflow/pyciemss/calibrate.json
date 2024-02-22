@@ -1,6 +1,5 @@
 {
   "engine": "ciemss",
-  "username": "not_provided",
   "model_config_id": "seird-stockflow",
   "dataset": {
     "id": "traditional",

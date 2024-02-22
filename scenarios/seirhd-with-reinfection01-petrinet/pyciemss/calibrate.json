@@ -1,6 +1,5 @@
 {
   "engine": "ciemss",
-  "username": "not_provided",
   "model_config_id": "seirhd-with-reinfection01-petrinet",
   "dataset": {
     "id": "traditional",
