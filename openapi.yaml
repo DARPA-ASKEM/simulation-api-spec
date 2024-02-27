@@ -54,6 +54,11 @@ components:
       description: "A list of all interventions where each variable at each timestep is separated"
       items:
         $ref: '#/components/schemas/Intervention'
+    OptimizeInterventions:
+      type: array
+      description: "A list of all interventions where each variable at each timestep is separated"
+      items:
+        $ref: '#/components/schemas/OptimizeIntervention'
     ModelConfiguration:
       type: object
       properties:
@@ -82,6 +87,16 @@ components:
           value:
             type: number
             example: 0.4
+    OptimizeIntervention:
+      type: object
+      description: "A in a variables at a specific timestep without a value provided."
+      properties:
+          timestep:
+            type: number
+            example: 2
+          name:
+            type: string
+            example: "beta"
     Timespan:
       type: object
       properties:
@@ -195,7 +210,7 @@ paths:
                 timespan:
                     $ref: '#/components/schemas/Timespan'
                 interventions:
-                   $ref: '#/components/schemas/Interventions'                  
+                   $ref: '#/components/schemas/OptimizeInterventions'                  
                 step_size:
                   title: Step Size
                   type: number
