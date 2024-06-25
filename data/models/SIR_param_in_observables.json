@@ -1,4 +1,5 @@
 {
+ "id": "sir-param-in-observables",
  "header": {
   "name": "SIR model with beta parameter in the observables definition",
   "schema": "https://raw.githubusercontent.com/DARPA-ASKEM/Model-Representations/petrinet_v0.6/petrinet/petrinet_schema.json",
