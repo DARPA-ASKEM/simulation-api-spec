@@ -1,0 +1,11 @@
+{
+  "engine": "ciemss",
+  "model_config_id": "SEIRHD-vacc-petrinet",
+  "timespan": {
+    "start": 0,
+    "end": 150.0
+  },
+  "extra": {
+    "num_samples": 100
+  }
+}

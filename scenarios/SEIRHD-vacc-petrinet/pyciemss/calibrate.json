@@ -1,0 +1,26 @@
+{
+  "engine": "ciemss",
+  "model_config_id": "SEIRHD-vacc-petrinet",
+  "dataset": {
+    "id": "LA_county_covid_data",
+    "filename": "LA_county_covid_data.csv",
+    "mappings": {
+      "tstep": "Timestamp",
+      "cases": "cumulative_cases",
+      "deaths": "deceased"
+    }
+  },
+  "timespan": {
+    "start": 0.0,
+    "end": 151.0
+  },
+  "extra": {
+    "num_samples": 100,
+    "start_time": 0.0,
+    "num_iterations": 250,
+    "lr": 0.03,
+    "verbose": false,
+    "num_particles": 1,
+    "method": "dopri5"
+  }
+}
